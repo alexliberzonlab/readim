@@ -1,8 +1,0 @@
-# Just double click the install.bat file in the current directory to compile and install
-
-the easiest way to install this is to do the following
-at the command promt of the current directory run the following commands:
-swig -python -c++ ReadIM.i
-swig -python -c++ ReadExamples.i
-python setup.py install
-python setup_ex.py install
