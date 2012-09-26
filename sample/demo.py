@@ -46,8 +46,9 @@ res = ReadIM.WriteIM7(dst_v, True, vbuff, vatts.next)
 res1 = ReadIM.WriteIM7(dst_im, True, imbuff, imatts.next)
 
 
-# note you will have to destroy the buffers when you are done using: But you need to make sure they have not already been destroyed
-##ReadIMextra.ReadIM.DestroyBuffer(vbuff)
-##ReadIMextra.ReadIM.DestroyBuffer(imbuff)
+# note you will have to destroy the buffers when you are done using: But you need to make sure they have not already been destroyed them
+# sometimes it crashes at this point for no particular reason.
+ReadIMextra.ReadIM.DestroyBuffer(vbuff)
+ReadIMextra.ReadIM.DestroyBuffer(imbuff)
 
 

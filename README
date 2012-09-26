@@ -1,8 +1,13 @@
-# Just double click the install.bat file in the current directory to compile and install
+First see if a binary is available otherwise:
 
-the easiest way to install this is to do the following
-at the command promt of the current directory run the following commands:
-swig -python -c++ ReadIM.i
-swig -python -c++ ReadExamples.i
-python setup.py install
-python setup_ex.py install
+For windows:
+To compile a new binary "double click" setup.py (assumes a suitable compiler is available and that swig is installed)
+binary (ReadIM[version,platform,python version].exe) can then be run from the dist folder.
+
+Other platforms (untested):
+setup.py may otherwise be used as normal:
+
+e.g.
+>>>python setup.py build install
+
+

@@ -26,7 +26,4 @@
  %array_class(unsigned short, useintArray);
  %array_class(float, usefloatArray);
  %array_class(double, usedoubleArray);
- /* AttributeList ** alan3 (AttributeList * al); */
- /*int getname (AttributeList ** ptr, char * str); */
 
-/*extern void add(double a, double b, double * result);*/

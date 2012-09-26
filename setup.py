@@ -5,9 +5,12 @@ setup.py file for SWIG example
 """
 #include "Python.h"
 from distutils.core import setup, Extension
-import zlib, subprocess, sys
+import subprocess, sys
 
-p= subprocess.check_call(['swig', '-python', '-c++' ,'ReadIM.i'])
+try:
+    p= subprocess.check_call(['swig', '-python', '-c++' ,'ReadIM.i'])
+except:
+    print 'unable to run swig! is it installed?. Will try to perform action anyway...'
 
 scs = ['ReadIM_wrap.cxx', 'ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
         r'zlib\adler32.c',r'zlib\deflate.c',r'zlib\infcodes.c',
@@ -33,8 +36,8 @@ license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc
    """
 setup (name = 'ReadIM',
        version = '0.2',
-       author      = "Alan Fleming + DaVis",
-       description = "Python wrapper for reading and writing LaVision IMX files",
+       author      = "Alan Fleming + LaVision",
+       description = "Python wrapper for reading and writing LaVision IMX files. Thanks to LaVision for providing original code.",
        ext_modules = [ReadIMX_module],
        py_modules = ["ReadIM", "ReadIMextra"],
        script_args = script_args,
