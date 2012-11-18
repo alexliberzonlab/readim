@@ -22,7 +22,7 @@ ReadIMX_module = Extension('_ReadIM',
                            sources=scs,
                            )
 if len(sys.argv) < 2:
-    script_args = ['bdist_wininst']
+    script_args = ['build', '--compiler=mingw32', 'install', 'bdist_wininst']
 ##    script_args = ['build', '--plat-name=win32','--compile=mingw32', 'bdist_wininst'] # does not really work for a 32 bit system
 else:
     script_args = sys.argv[1:]
