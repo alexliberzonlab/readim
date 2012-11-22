@@ -1,26 +1,16 @@
-/*
-	ReadIMX.dll
-	(c) LaVision
-	TL 10.05.01: reading IMG/IMX/VEC raw data
-	TL 11.06.01: added reading of string attributes
-	TL 30.09.02: corrected mis-aligned image_header for Linux
-	TL 05.02.04: support IM7/VC7 on WIN32
-	TL 22.03.04: BufferScaleType and reading of scaling information
-	TL 09.07.04: DestroyBuffer
-	TL 08.12.04: LabView functions
-	TL 13.12.04: WriteIMG
-	TL 18.02.05: DestroyAttributeList
-	TL 20.09.05: WriteIMX
-	TL 07.03.06: LabView functions to write number of frame
-	TL 02.11.06: Labiew functions remember the attribute list, WriteImgAttributes
-	TL 16.02.09: ReadIM7 with 12 bit compression
+//--------------------------------------------------------------------------------------------------
+//
+// Copyright (C) 2001-2012 LaVision GmbH.  All Rights Reserved.
+//
+//--------------------------------------------------------------------------------------------------
 
+/*
 	Read a LaVision IMX/IMG/VEC file by a call to:
 
 	int ReadIMX ( const char* theFileName, BufferType* myBuffer, AttributeList** myList )
 
-	If you don't want to read the attributes, set myList = NULL.
-	If myList is set, the parameter returns a pointer to the list.
+	If you don't want to read the attributes, set myList = NULL. 
+	If myList is set, the parameter returns a pointer to the list. 
 	You have to free the strings manually or call DestroyAttributeList.
 
 	The function returns the error codes of ImReadError_t.
@@ -31,8 +21,8 @@
 #ifdef _LINUX
 #	define max(v1,v2)	(v1 > v2 ? v1 : v2)
 #else // Windows
-#	define max(v1,v2)	(v1 > v2 ? v1 : v2)
-	// TL 21.04.09: strcpy_s Warnungen weg
+#	define max(v1,v2)	(v1 > v2 ? v1 : v2) // you have to define in windows too!
+	// TL 21.04.09: strcpy_s warnings removed
 #	pragma warning (disable : 4996)
 #endif
 
@@ -152,32 +142,35 @@ int CreateBuffer( BufferType* myBuffer, int theNX, int theNY, int theNZ, int the
 {
 	if (myBuffer==NULL)
 		return 0;
-   myBuffer->nx = theNX;
-   myBuffer->ny = theNY;
-   myBuffer->nz = theNZ;
-   myBuffer->nf = theNF;
+	myBuffer->nx = theNX;
+	myBuffer->ny = theNY;
+	myBuffer->nz = theNZ;
+	myBuffer->nf = theNF;
+	//fprintf(stderr,"CreateBuffer size %i %i %i %i\n",theNX,theNY,theNZ,theNF);
 	if (imageSubType > 0)
 	{	// vector
 		theNY *= GetVectorComponents( imageSubType );
+		//fprintf(stderr,"CreateBuffer type=%i comp=%i lines=%i\n",imageSubType,GetVectorComponents( imageSubType ), theNY);
 		isFloat = true;
 	}
-   myBuffer->isFloat = isFloat;
-   myBuffer->totalLines = theNY*theNZ*theNF;
+	myBuffer->isFloat = isFloat;
+	myBuffer->totalLines = theNY*theNZ*theNF;
 	myBuffer->vectorGrid = vectorGrid;
 	myBuffer->image_sub_type = imageSubType;
-   int size = theNX * myBuffer->totalLines;
-   if (isFloat)
+	int size = theNX * myBuffer->totalLines;
+	if (isFloat)
 	{
-      myBuffer->floatArray = (float*)malloc(sizeof(float)*size);
-   }
+		myBuffer->floatArray = (float*)malloc(sizeof(float)*size);
+	}
 	else
 	{
-      myBuffer->wordArray = (Word*)malloc(sizeof(Word)*size);
-   }
+		myBuffer->wordArray = (Word*)malloc(sizeof(Word)*size);
+	}
 	SetBufferScale( &myBuffer->scaleX, 1, 0, "", "pixel" );
 	SetBufferScale( &myBuffer->scaleY, 1, 0, "", "pixel" );
 	SetBufferScale( &myBuffer->scaleI, 1, 0, "", "counts" );
-   return (myBuffer->floatArray!=NULL || myBuffer->wordArray!=NULL);
+	myBuffer->bMaskArray = NULL;
+	return (myBuffer->floatArray!=NULL || myBuffer->wordArray!=NULL);
 }
 
 
@@ -199,6 +192,11 @@ void DestroyBuffer( BufferType* myBuffer )
 		myBuffer->ny = 0;
 		myBuffer->nz = 0;
 		myBuffer->nf = 0;
+		if (myBuffer->bMaskArray)
+		{
+			delete[] myBuffer->bMaskArray;
+			myBuffer->bMaskArray = NULL;
+		}
 	}
 }
 
@@ -403,7 +401,7 @@ ImReadError_t SCPackOldIMX_Read( FILE* theFile, BufferType* myBuffer )
 		} 	// for i
 	}	// for bline
 
-	fseek( theFile, IMX_pagepos + ((char*)bpageadr - (char*)page), SEEK_SET );
+	fseek( theFile, (long)(IMX_pagepos + ((char*)bpageadr - (char*)page)), SEEK_SET );
 	return IMREAD_ERR_NO;
 
 errexit:
@@ -540,29 +538,30 @@ errexit:
 /*****************************************************************************/
 
 typedef enum 
-	{
-      IEH_END = 0,
-      IEH_SCALE_X,
-      IEH_SCALE_Y,
-      IEH_SCALE_Z,
-      IEH_SCALE_I,
-      IEH_COMMENT,
-      IEH_ATTRIBUTE,
-      IEH_SCALE_F,
-      IEH_ATTRIBUTE_FLOATARRAY,
-      IEH_ATTRIBUTE_INTARRAY,
-      IEH_ATTRIBUTE_WORDARRAY,
-		IEH_TIME,						// long time with milliseconds, TL 24.10.00
-		// jetzt duerfen neue Attribute folgen, die bisherigen Daten versteht auch DaVis 6
-		IEH_DATE,
-		// max index of this list
-		IEH_MAX
-   } type_extheader;
+{
+   IEH_END = 0,
+   IEH_SCALE_X,
+   IEH_SCALE_Y,
+   IEH_SCALE_Z,
+   IEH_SCALE_I,
+   IEH_COMMENT,
+   IEH_ATTRIBUTE,
+   IEH_SCALE_F,
+   IEH_ATTRIBUTE_FLOATARRAY,
+   IEH_ATTRIBUTE_INTARRAY,
+   IEH_ATTRIBUTE_WORDARRAY,
+	IEH_TIME,						// long time with milliseconds, TL 24.10.00
+	// jetzt duerfen neue Attribute folgen, die bisherigen Daten versteht auch DaVis 6
+	IEH_DATE,
+	// max index of this list
+	IEH_MAX
+} AttributeType;
 
 typedef struct
-   {  type_extheader type;
-      int            size;
-   } image_extheader;
+{
+	AttributeType type;
+   int           size;
+} AttributeObject;
 
 
 int SetAttribute( AttributeList** myList, const char* theName, const char* theValue )
@@ -570,12 +569,12 @@ int SetAttribute( AttributeList** myList, const char* theName, const char* theVa
 	int len;
    AttributeList* ptr = (AttributeList*)malloc(sizeof(AttributeList));
 	// create memory for attribute name
-	len = strlen(theName);
+	len = (int)strlen(theName);
    ptr->name = (char*)malloc(len+1);
    strcpy(ptr->name,theName);
 	ptr->name[len] = '\0';
 	// create memory for attribute value
-	len = strlen(theValue);
+	len = (int)strlen(theValue);
    ptr->value = (char*)malloc(len+1);
    strcpy(ptr->value,theValue);
 	ptr->value[len] = '\0';
@@ -605,7 +604,7 @@ void Attribute_BreakToNull( char* data, int size )
 
 int ReadImgAttributes( FILE* theFile, AttributeList** myList )
 {
-   image_extheader item;
+   AttributeObject item;
 
    while (fread((char*)&item,1,sizeof(item),theFile))
 	{
@@ -673,9 +672,9 @@ int ReadImgAttributes( FILE* theFile, AttributeList** myList )
 }
 
 
-void WriteAttribute_ITEM( FILE* theFile, type_extheader t, int l, const char* d )
+void WriteAttribute_ITEM( FILE* theFile, AttributeType t, int l, const char* d )
 {   
-   image_extheader item;
+   AttributeObject item;
    item.type = t;                            
    item.size = l;                            
    fwrite((char*)&item,sizeof(item),1,theFile);
@@ -687,23 +686,37 @@ void WriteAttribute_ITEM( FILE* theFile, type_extheader t, int l, const char* d 
 	*/
 }
 
-void WriteAttribute_SCALE( FILE* theFile, type_extheader t, char* value )
+void WriteAttribute_SCALE( FILE* theFile, AttributeType t, char* value )
 {   
-	int len = strlen(value);
+	int len = (int)strlen(value);
 	Attribute_BreakToNull( value, len );
 	WriteAttribute_ITEM( theFile, t, len, value );
 }
 
+void WriteScaleAsAttributes( FILE* theFile, const BufferScaleType& p_pScale, AttributeType p_eAttrType )
+{
+   char sAttrValue[256];
+   sprintf( sAttrValue,"%f %f\n%s\n%s", p_pScale.factor, p_pScale.offset, p_pScale.unit, p_pScale.description );
+	WriteAttribute_SCALE( theFile, p_eAttrType, sAttrValue );
+}
+
+void WriteScalesAsAttributes( FILE* theFile, const BufferType& p_pBuffer )
+{
+	WriteScaleAsAttributes( theFile, p_pBuffer.scaleX, IEH_SCALE_X );
+	WriteScaleAsAttributes( theFile, p_pBuffer.scaleY, IEH_SCALE_Y );
+	WriteScaleAsAttributes( theFile, p_pBuffer.scaleI, IEH_SCALE_I );
+}
+
 void WriteAttribute_END( FILE *theFile )
 {
-   image_extheader item;
+   AttributeObject item;
 	item.type = IEH_END; 
 	item.size = 0; 
 	fwrite( (char*)&item, sizeof(item), 1, theFile );
 }
 
 
-int WriteImgAttributes( FILE* theFile, bool isIM6, AttributeList* myList )
+int WriteImgAttributes( FILE* theFile, bool /*isIM6*/, AttributeList* myList )
 {
 	AttributeList* itsAttribute = myList;
    while (itsAttribute) 
@@ -735,23 +748,23 @@ int WriteImgAttributes( FILE* theFile, bool isIM6, AttributeList* myList )
 		else
 		if (strcmp(itsAttribute->name,"_COMMENT")==0)
 		{
-			WriteAttribute_ITEM( theFile, IEH_COMMENT, strlen(itsAttribute->value), itsAttribute->value );
+			WriteAttribute_ITEM( theFile, IEH_COMMENT, (int)strlen(itsAttribute->value), itsAttribute->value );
 		}
 		else
 		if (strcmp(itsAttribute->name,"_TIME")==0)
 		{
-			WriteAttribute_ITEM( theFile, IEH_TIME, strlen(itsAttribute->value), itsAttribute->value );
+			WriteAttribute_ITEM( theFile, IEH_TIME, (int)strlen(itsAttribute->value), itsAttribute->value );
 		}
 		else
 		if (strcmp(itsAttribute->name,"_DATE")==0)
 		{
-			WriteAttribute_ITEM( theFile, IEH_DATE, strlen(itsAttribute->value), itsAttribute->value );
+			WriteAttribute_ITEM( theFile, IEH_DATE, (int)strlen(itsAttribute->value), itsAttribute->value );
 		}
 		else
 		{
 			char* value = (char*)malloc( strlen(itsAttribute->name)+1+strlen(itsAttribute->value)+1 );
 			sprintf(value,"%s=%s",itsAttribute->name,itsAttribute->value);
-			WriteAttribute_ITEM( theFile, IEH_ATTRIBUTE, strlen(value), value );
+			WriteAttribute_ITEM( theFile, IEH_ATTRIBUTE, (int)strlen(value), value );
 			free(value);
 		}
 		
@@ -789,7 +802,7 @@ inline void Compress16Bits( int n16bytes, signed char*& imx_bpageadr, long& imx_
 	*adr++ = IMX_CODE_NWORD;					/* code for n-16-pixel */
 	adr[2] = adr[1];								/* shift first pixel 1 right */
 	adr[1] = adr[0];								/* shift first pixel 1 right */
-	adr[0] = n16bytes;							/* number of uncompressed pixel */
+	adr[0] = (signed char)n16bytes;			/* number of uncompressed pixel */
 	adr += 3;										/* increment pointer */	
 
 	// TL 08.03.02: i=0 kopiert in sich selbst
@@ -846,16 +859,11 @@ inline void Compress16Bits( int n16bytes, signed char*& imx_bpageadr, long& imx_
 
 bool StoreImxOld( BufferType* myBuffer, int rowFirst, int rowLast, int maxCol, FILE *theFile )
 {
-	int theNX = myBuffer->nx,
-	    theNY = myBuffer->ny,
-		 theNZ = myBuffer->nz,
-		 theNF = myBuffer->nf;
+	int theNX = myBuffer->nx;
 
 	int BUFFERSIZE	= (theNX/512) * 512 * 2 + 4096;	// n * sectorsize, size of packing memory, words
 	unsigned long BUFFERSAVE = 2 * theNX + 256;	// store memory when only this space is available (may not be enough for the next row)
-   char* page, *mbPage=NULL;
-	unsigned long mbFree = 0;
-	bool mbInBlock = false;
+   char* page;
 	
 	page = (char*)malloc(sizeof(char)*BUFFERSIZE);
 	if ( page == NULL )
@@ -969,8 +977,8 @@ int WriteIMX( FILE *theFile, BufferType* myBuffer )
 // preview:
 	int row;
 	int steps = max( theNX / 100 + 1, theNY / 100 + 1 );
-	Byte ny = (theNY-1) / steps + 1;
-	Byte nx = (theNX-1) / steps + 1;
+	Byte ny = (Byte)((theNY-1) / steps + 1);
+	Byte nx = (Byte)((theNX-1) / steps + 1);
 	fwrite( &nx, sizeof(Byte), 1, theFile );			// store 1 byte nx/ny
 	fwrite( &ny, sizeof(Byte), 1, theFile );
 
@@ -1025,11 +1033,11 @@ int WriteIMGXAttr( const char* theFileName, bool isIMX, BufferType* myBuffer, At
 	// create header
 	image_header header;
 	header.version		= VER_VOLUME_BUFFER;
-	header.imagetype	= (myBuffer->isFloat ? IMAGE_FLOAT : (isIMX?IMAGE_IMX:IMAGE_IMG) );
-	header.columns		= theNX;
-	header.rows			= theNY;
-	header.longZDim	= theNZ;
-	header.f_dim		= theNF;
+	header.imagetype	= (short)(myBuffer->isFloat ? IMAGE_FLOAT : (isIMX?IMAGE_IMX:IMAGE_IMG) );
+	header.columns		= (short)theNX;
+	header.rows			= (short)theNY;
+	header.longZDim	= (short)theNZ;
+	header.f_dim		= (short)theNF;
 	header.image_sub_type = 0;	// Image
 
 	// copy scales

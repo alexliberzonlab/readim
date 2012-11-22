@@ -1,6 +1,10 @@
-/* ReadIM7
-	TL 05.01.04
+//--------------------------------------------------------------------------------------------------
+//
+// Copyright (C) 2001-2012 LaVision GmbH.  All Rights Reserved.
+//
+//--------------------------------------------------------------------------------------------------
 
+/*
 	Read a LaVision IM7/VC7 file by a call to:
 
    int ReadIM7 ( const char* theFileName, BufferType* myBuffer, AttributeList** myList );
@@ -10,15 +14,31 @@
 
    The function returns the error codes of ImReadError_t.
 */
-
+	 
 #include "ReadIMX.h"
 #include "ReadIM7.h"
 #include "zlib/zlib.h"
 
+#pragma warning(disable:4996) // Disable warning about safety of sscanf, strncpy and fopen
+
+uint64 FileGetPosition( FILE *p_pFile )
+{
+	uint64 nPos = 0;
+#	ifdef _LINUX
+	fpos_t pos;
+	fgetpos( p_pFile, &pos );
+	return pos.__pos;
+#	else
+	nPos = _ftelli64( p_pFile );
+#	endif
+	return nPos;
+}
+
+
 enum IM7PackType_t
 {
 	IM7_PACKTYPE__UNCOMPR= 0x1000,// autoselect uncompressed
-	IM7_PACKTYPE__FAST,				// autoselect fastest packtype,
+	IM7_PACKTYPE__FAST,				// autoselect fastest packtype, 
 	IM7_PACKTYPE__SIZE,				// autoselect packtype with smallest resulting file
 	IM7_PACKTYPE_IMG			= 0,	// uncompressed, like IMG
 	IM7_PACKTYPE_IMX,					// old version compression, like IMX
@@ -57,7 +77,6 @@ ImReadError_t SCPackUncompressed_Read( FILE* theFile, BufferType* myBuffer, bool
 }
 
 
-
 ImReadError_t SCPackZlib_Read( FILE* theFile, BufferType* myBuffer )
 {
 	int sourceLen = 0;
@@ -71,7 +90,7 @@ ImReadError_t SCPackZlib_Read( FILE* theFile, BufferType* myBuffer )
 		return IMREAD_ERR_MEMORY;
 	}
 	fread( source, 1, sourceLen, theFile );
-
+	
 	uLongf destLen = 0;
 	Bytef *dest = Buffer_GetRowAddrAndSize(myBuffer,0,destLen);
 	destLen *= myBuffer->totalLines;
@@ -116,7 +135,6 @@ ImReadError_t SCPackZlib_Read( FILE* theFile, BufferType* myBuffer )
 	free(source);
 	return errret;
 }
-
 
 
 ImReadError_t SCPackFixedBits_Read( FILE* theFile, BufferType* myBuffer, int theValidBits )
@@ -200,7 +218,6 @@ ImReadError_t SCPackFixedBits_Read( FILE* theFile, BufferType* myBuffer, int the
 }
 
 
-
 void Scale_Read( const char*theData, BufferScaleType* theScale )
 {
 	int pos;
@@ -225,6 +242,54 @@ void Scale_Read( const char*theData, BufferScaleType* theScale )
 		while (theScale->unit[pos]!=' ' && theScale->unit[pos]!='\n' && theScale->unit[pos]!='\0')
 			pos++;
 		theScale->unit[pos] = '\0';
+	}
+}
+
+
+void ReadMask( BufferType& myBuffer, FILE* p_pFile, int p_nSizeX, int p_nSizeY, int p_nSizeZ, int p_nSizeF, uint64 p_nOffsetMask, uint64 p_nOffsetMaskPacked )
+{
+	size_t nSize = p_nSizeX * p_nSizeY * p_nSizeZ * p_nSizeF;
+	bool *pMask = new bool[nSize];
+	int err = 0;
+
+	if ( p_nOffsetMask != 0 )
+	{	// uncompressed mask
+		fseek( p_pFile, (long)p_nOffsetMask, SEEK_SET );
+		fread( pMask, sizeof(bool), nSize, p_pFile );
+	}
+	if ( p_nOffsetMaskPacked != 0 )
+	{	// compressed mask
+		fseek( p_pFile, (long)p_nOffsetMaskPacked, SEEK_SET );
+
+		// load pack type and uncompress
+		IM7PackType_t ePackType;
+		fread( &ePackType, sizeof(ePackType), 1, p_pFile );
+		switch (ePackType)
+		{
+		case IM7_PACKTYPE_ZLIB:
+			{	// load data into memory and uncompress
+				unsigned int nPackedSize;
+				fread( &nPackedSize, sizeof(nPackedSize), 1, p_pFile );
+				Byte *pData = new Byte[nPackedSize];
+				fread( pData, sizeof(Byte), nPackedSize, p_pFile );
+				// uncompress
+				uLongf nSizeDest = (uLongf)nSize;
+				err = uncompress( (Bytef*)pMask, &nSizeDest, pData, (uLongf)nPackedSize );
+				delete[] pData;
+			}
+			break;
+		default:
+			err = -1;	// can't uncompress
+		}
+	}
+
+	if (err)
+	{	// clean up
+		delete[] pMask;
+	}
+	else
+	{	// use mask in myBuffer
+		myBuffer.bMaskArray = pMask;
 	}
 }
 
@@ -261,6 +326,31 @@ int ReadIM7 ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
 	{
       fclose(theFile);
       return IMREAD_ERR_FORMAT;
+	}
+
+	uint64 nOffsetAttributes       = 0;
+	uint64 nOffsetFrameTable       = 0;
+	uint64 nOffsetMask             = 0;
+	uint64 nOffsetMaskPacked       = 0;
+	uint64 nOffsetTypedScalar       = 0;
+	uint64 nOffsetTypedScalarPacked = 0;
+	if ( header.extraFlags != 0 )
+	{  // read file offsets from end of file
+		uint64 nOffsetData = FileGetPosition(theFile);
+		if ( (header.extraFlags & IMAGE_EXTRA_OFFSET_TAIL) != 0 )
+		{
+			Image_Tail_7 offset_table;
+			fseek( theFile, -(int)sizeof(offset_table), SEEK_END );
+			fread( &offset_table, sizeof(offset_table), 1, theFile );
+			nOffsetAttributes        = offset_table.offset[0];
+			nOffsetFrameTable        = offset_table.offset[1];
+			nOffsetMask              = offset_table.offset[2];
+			nOffsetTypedScalar       = offset_table.offset[3];
+			nOffsetTypedScalarPacked = offset_table.offset[4];
+			nOffsetMaskPacked        = offset_table.offset[5];
+		}
+		// return to old position
+		fseek( theFile, (long)nOffsetData, SEEK_SET );
 	}
 
 	theNX = header.sizeX;
@@ -314,6 +404,14 @@ int ReadIM7 ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
 		}
    }
 
+	if (errret==IMREAD_ERR_NO)
+	{
+		if (nOffsetMask != 0 || nOffsetMaskPacked != 0)
+		{	// read mask
+			ReadMask( *myBuffer, theFile, header.sizeX, header.sizeY, header.sizeZ, header.sizeF, nOffsetMask, nOffsetMaskPacked );
+		}
+	}
+
 	fclose(theFile);
 	return errret;
 }
@@ -344,15 +442,15 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	header.buffer_format 	= (myBuffer->isFloat ? -3 : -4 );	// images float or word
 	if (myBuffer->image_sub_type > 0)
 	{	// vector
-		header.buffer_format = myBuffer->image_sub_type;
-		header.vector_grid = myBuffer->vectorGrid;
+		header.buffer_format = (short)myBuffer->image_sub_type;
+		header.vector_grid   = (short)myBuffer->vectorGrid;
 		theNY *= GetVectorComponents( (BufferFormat_t)header.buffer_format );
 	}
 	if (myBuffer->isFloat)
 	{	// no compression for float and vector
 		isPackedIMX = false;
 	}
-	header.pack_type			= (isPackedIMX ? IM7_PACKTYPE_IMX : IM7_PACKTYPE_IMG);
+	header.pack_type			= (short)(isPackedIMX ? IM7_PACKTYPE_IMX : IM7_PACKTYPE_IMG);
 	if (fwrite( &header, sizeof(header), 1, theFile )!=1)
 	{
 		fclose(theFile);
@@ -381,6 +479,7 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	}
 
 	// write attributes
+	WriteScalesAsAttributes( theFile, *myBuffer );
 	if (myList)
 	{
 		WriteImgAttributes( theFile, false, myList );
@@ -389,7 +488,8 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	{	// just END attribute
 		WriteAttribute_END( theFile );
 	}
-
+	
 	fclose(theFile);
 	return 0;
 }
+

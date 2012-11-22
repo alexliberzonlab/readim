@@ -1,3 +1,9 @@
+//--------------------------------------------------------------------------------------------------
+//
+// Copyright (C) 2001-2012 LaVision GmbH.  All Rights Reserved.
+//
+//--------------------------------------------------------------------------------------------------
+
 #ifndef __READIMX_H
 #define __READIMX_H
 
@@ -85,6 +91,7 @@ typedef struct
 	BufferScaleType	scaleX;		// x-scale
 	BufferScaleType	scaleY;		// y-scale
 	BufferScaleType	scaleI;		// intensity scale
+	bool*			bMaskArray;			// mask array, NULL if no mask exists
 } BufferType;
 
 typedef struct AttributeList 
@@ -116,6 +123,7 @@ void DestroyAttributeList( AttributeList** myList );
 //! Append a new attribute to the list.
 int SetAttribute( AttributeList** myList, const char* theName, const char* theValue );
 
+void WriteScalesAsAttributes( FILE* theFile, const BufferType& p_pBuffer );
 void WriteAttribute_END( FILE *theFile );
 
 int ReadImgAttributes( FILE* theFile, AttributeList** myList );

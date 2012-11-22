@@ -285,6 +285,30 @@ def buffer_as_array(buff):
     a = np.ctypeslib.as_array(pA,(components,buff.ny,buff.nx)) #updated 22/5/11
     return a, buff
 
+def buffer_mask_as_array(buff):
+
+    """
+    returns the buffer mask (DaVis V8 files) as an array
+    first axis is like a frame (sometimes there are multiple frames)
+    [offset::dims] will return all the components for an axis
+
+    a, buff = np.array([components*nf,nx,ny]), ReadIM.BufferType
+    where: components = ReadIM.GetVectorComponents(buff.image_sub_type) * buff.nf
+
+    you must destroy buff manually with ReadIM.DestroyBuffer(buff) also del(a) is necessary
+
+    suitable for BufferTypeAlt objects and writing data.
+    """
+
+    if type(buff) is BufferTypeAlt:
+        buff, err = createBuffer_davis(buff)
+
+    if buff.bMaskArray:
+        pA = ctypes.cast( buff.bMaskArray.__long__(), ctypes.POINTER( ctypes.c_bool))
+        a = np.ctypeslib.as_array(pA,(buff.nf,buff.ny,buff.nx)) #updated 22/5/11
+    else:
+        a = None
+    return a, buff
 
 def att2dict(att, destroy=True):
     """ Convert an Attribute list to a dictionary
