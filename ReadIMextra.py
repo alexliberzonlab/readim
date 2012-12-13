@@ -248,7 +248,7 @@ def load_AttributeList(atts={}):
         a.next  = ReadIM.AttributeList()
         a       = a.next
         a.name  = key
-        a.value = atts[key]
+        a.value = str(atts[key])
 
     return attlist
 
