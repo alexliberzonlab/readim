@@ -24,7 +24,7 @@ ReadIMX_module = Extension('_ReadIM',
 if len(sys.argv) < 2:
     script_args = ['build', '--compiler=mingw32', 'install', 'bdist_wininst']
     script_args = ['build', 'install'] # does not really work for a 32 bit system
-    script_args = ['build', 'bdist_wininst'] # does not really work for a 32 bit system
+    script_args = ['build', 'install', 'bdist_wininst'] # does not really work for a 32 bit system
 else:
     script_args = sys.argv[1:]
 
@@ -37,7 +37,7 @@ license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc
    Attribution-NonCommercial 3.0 Unported License</a>.
    """
 setup (name = 'ReadIM',
-       version = '0.3',
+       version = '0.3.1',
        author      = "Alan Fleming + LaVision",
        description = "Python wrapper for reading and writing LaVision IMX files. Thanks to LaVision for providing original code.",
        ext_modules = [ReadIMX_module],

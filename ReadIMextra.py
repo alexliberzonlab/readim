@@ -6,13 +6,15 @@ import os
 import ctypes
 import numpy as np
 
-
 class BunchMappable():
     """
     An object for iterative access to a mappable object. The keys must always
     be alpha_numeric
     """
-    def __init__(self, mappable, immutable=False):
+    def __init__(self, mappable, immutable=False, str2num=None):
+        """str2num can be a method for converting strings to numbers.
+        val = str2num(val). Not the converter must return values even if it cannot convert.
+        """
         self._immutable = immutable
 
         super(BunchMappable, self).__setattr__('_mappable',mappable)
@@ -24,7 +26,10 @@ class BunchMappable():
                 if hasattr(val, 'items'):
                     self.__dict__[key] = BunchMappable(val)
                 else:
-                    self.__dict__[key] = val
+                    if str2num is None:
+                        self.__dict__[key] = val
+                    else:
+                        self.__dict__[key] = str2num(val)
 
     def __repr__(self):
             return repr(self._mappable)
