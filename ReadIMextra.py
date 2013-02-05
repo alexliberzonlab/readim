@@ -24,12 +24,13 @@ class BunchMappable():
                 if key.find('_') == 0:
                     continue #Skip intended hidden files
                 if hasattr(val, 'items'):
-                    self.__dict__[key] = BunchMappable(val)
+                    self.__dict__[key] = BunchMappable(val, immutable=immutable, str2num=str2num)
                 else:
                     if str2num is None:
                         self.__dict__[key] = val
                     else:
                         self.__dict__[key] = str2num(val)
+
 
     def __repr__(self):
             return repr(self._mappable)
