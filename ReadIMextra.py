@@ -16,6 +16,7 @@ class BunchMappable():
         val = str2num(val). Not the converter must return values even if it cannot convert.
         """
         self._immutable = immutable
+        self._key = None
 
         super(BunchMappable, self).__setattr__('_mappable',mappable)
 
@@ -24,7 +25,7 @@ class BunchMappable():
                 if key.find('_') == 0:
                     continue #Skip intended hidden files
                 if hasattr(val, 'items'):
-                    self.__dict__[key] = BunchMappable(val, immutable=immutable, str2num=str2num)
+                    self.__dict__[key] = self.__class__(val, immutable=immutable, str2num=str2num)
                 else:
                     if str2num is None:
                         self.__dict__[key] = val
@@ -45,22 +46,45 @@ class BunchMappable():
         return len(self.__dict__)
 
     def __getitem__(self, key):
-        return self.__dict__[key]
+        if not key in self.__dict__:
+            parent = self._mappable
+            depth = 1
+            while True:
+                try:
+                    parent = parent._mappable
+                    depth += 1
+                except AttributeError:
+                    break
+            raise KeyError, 'Key "{0}" is missing from:"{1}"at depth={2}'.format(key, parent, depth)
+
+        obj = self.__dict__[key]
+        try:
+            super(obj.__class__, obj).__setattr__('_key', key) #track the key
+        except:
+            pass
+        return obj
 
     def __iter__(self):
         for key in sorted(self._mappable.keys()):
             yield key
 
     def __setattr__(self,name, value):
-        if name is '_immutable':
+        if name in ['_immutable', '_key']:
             super(BunchMappable, self).__setattr__(name,value)
         elif self._immutable:
-            raise AttributeError, 'This Buffer is immutable'
+            raise AttributeError, 'This Object is immutable'
         else:
 
             if name in self._mappable:
                 self._mappable[name] = value
-                object.__setattr__(self, name, value)
+                try:
+                    object.__setattr__(self, name, value)
+                except AttributeError:
+                    pass
+
+    def get(self, key):
+        if key in self:
+            return self[key]
 
 
 class ScaleTypeAlt(BunchMappable):
@@ -80,7 +104,7 @@ class BufferTypeAlt(BunchMappable):
     """ bufferType designed to replicate davis buffer type so that it is free of swig
     """
 
-    def __init__(self, buff, DestroyBuffer = True, immutable=False):
+    def __init__(self, buff, DestroyBuffer = True, immutable=False, str2num=None):
 
         if isinstance(buff, ReadIM.BufferType):
 
@@ -112,7 +136,7 @@ class BufferTypeAlt(BunchMappable):
         else:
             raise TypeError, 'Type of buffer not recognised!\n%s' % repr(buff)
 
-        super(BufferTypeAlt, self).__init__(mappings, immutable=immutable)
+        super(BufferTypeAlt, self).__init__(mappings, immutable=immutable, str2num=str2num)
 
         # cleanup
         if (type(buff) == ReadIM.BufferType) and DestroyBuffer:
