@@ -11,21 +11,23 @@ class BunchMappable():
     An object for iterative access to a mappable object. The keys must always
     be alpha_numeric
     """
-    def __init__(self, mappable, immutable=False, str2num=None):
+    def __init__(self, mappable, immutable=False, str2num=None, parent=None, key=None):
         """str2num can be a method for converting strings to numbers.
         val = str2num(val). Not the converter must return values even if it cannot convert.
         """
+        self._parent    = parent
+        self._key       = key
         self._immutable = immutable
-        self._key = None
 
-        super(BunchMappable, self).__setattr__('_mappable',mappable)
+
+        super(BunchMappable, self).__setattr__('_mappable', mappable)
 
         if hasattr(mappable, 'items'):
             for key,val in mappable.items():
                 if key.find('_') == 0:
                     continue #Skip intended hidden files
                 if hasattr(val, 'items'):
-                    self.__dict__[key] = self.__class__(val, immutable=immutable, str2num=str2num)
+                    self.__dict__[key] = self.__class__(val, immutable=immutable, str2num=str2num, parent=self, key=key)
                 else:
                     if str2num is None:
                         self.__dict__[key] = val
@@ -45,31 +47,34 @@ class BunchMappable():
     def __len__(self):
         return len(self.__dict__)
 
-    def __getitem__(self, key):
-        if not key in self.__dict__:
-            parent = self._mappable
-            depth = 1
-            while True:
-                try:
-                    parent = parent._mappable
-                    depth += 1
-                except AttributeError:
-                    break
-            raise KeyError, 'Key "{0}" is missing from:"{1}"at depth={2}'.format(key, parent, depth)
+    def __getattr__(self, name):
+        return self[name] # just force a __getitem__ type error
 
-        obj = self.__dict__[key]
-        try:
-            super(obj.__class__, obj).__setattr__('_key', key) #track the key
-        except:
-            pass
-        return obj
+    def __getitem__(self, key):
+
+        if key in self.__dict__:
+            return self.__dict__[key]
+
+        else: # Get some info before raising an error
+            parent = self
+            depth = 0
+            keys = [key]
+            while hasattr(parent, '_parent'):
+                    depth += 1
+                    keys.append(getattr(parent,'_key', ''))
+                    parent = parent._parent or parent._mappable
+
+            description = getattr(parent, 'filename', None) or repr(parent)
+            keys.pop(-1)
+            raise KeyError, '"{0}" is missing from:"{1}" (depth={2})'.format('->'.join(reversed(keys)), description, depth)
+
 
     def __iter__(self):
         for key in sorted(self._mappable.keys()):
             yield key
 
     def __setattr__(self,name, value):
-        if name in ['_immutable', '_key']:
+        if name in ['_immutable', '_key', '_parent']:
             super(BunchMappable, self).__setattr__(name,value)
         elif self._immutable:
             raise AttributeError, 'This Object is immutable'
@@ -104,7 +109,7 @@ class BufferTypeAlt(BunchMappable):
     """ bufferType designed to replicate davis buffer type so that it is free of swig
     """
 
-    def __init__(self, buff, DestroyBuffer = True, immutable=False, str2num=None):
+    def __init__(self, buff, DestroyBuffer = True, immutable=False, str2num=None, parent=None, key=None):
 
         if isinstance(buff, ReadIM.BufferType):
 

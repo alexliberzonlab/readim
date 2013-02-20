@@ -37,7 +37,7 @@ license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc
    Attribution-NonCommercial 3.0 Unported License</a>.
    """
 setup (name = 'ReadIM',
-       version = '0.3.3',
+       version = '0.3.4',
        author      = "Alan Fleming + LaVision",
        description = "Python wrapper for reading and writing LaVision IMX files. Thanks to LaVision for providing original code.",
        ext_modules = [ReadIMX_module],
