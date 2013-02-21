@@ -87,9 +87,11 @@ class BunchMappable():
                 except AttributeError:
                     pass
 
-    def get(self, key):
-        if key in self:
+    def get(self, key, arg=None):
+        if key in self.__dict__:
             return self[key]
+        else:
+            return arg
 
 
 class ScaleTypeAlt(BunchMappable):
