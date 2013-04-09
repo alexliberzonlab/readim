@@ -4,7 +4,7 @@
 setup.py file for SWIG example
 """
 
-version = '0.4.0'
+version = '0.5.0'
 
 #include "Python.h"
 from distribute_setup import use_setuptools
