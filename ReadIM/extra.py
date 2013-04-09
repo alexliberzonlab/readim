@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 __metaclass__ = type
 
-import ReadIM
+import core
 import os
 import ctypes
 import numpy as np
@@ -113,7 +113,7 @@ class BufferTypeAlt(BunchMappable):
 
     def __init__(self, buff, DestroyBuffer = True, immutable=False, str2num=None, parent=None, key=None):
 
-        if isinstance(buff, ReadIM.BufferType):
+        if isinstance(buff, core.BufferType):
 
             mappings = dict(
                         image_sub_type = buff.image_sub_type,
@@ -146,8 +146,8 @@ class BufferTypeAlt(BunchMappable):
         super(BufferTypeAlt, self).__init__(mappings, immutable=immutable, str2num=str2num)
 
         # cleanup
-        if (type(buff) == ReadIM.BufferType) and DestroyBuffer:
-            ReadIM.DestroyBuffer(buff)
+        if (type(buff) == core.BufferType) and DestroyBuffer:
+            core.DestroyBuffer(buff)
 
 def obj2dict(obj, d):
     """ return a nested dictionary of all non hidden attributes
@@ -164,13 +164,13 @@ def obj2dict(obj, d):
 
 def createBuffer(b):
     """ creates a buffer in memory for an existing ReadIm.BufferType
-        using the ReadIM.CreatBuffer() method
-    b must be an instance of a buffer ie. b = ReadIM.BufferType()
+        using the core.CreatBuffer() method
+    b must be an instance of a buffer ie. b = core.BufferType()
     attributes assigned are:  b, b.nx ,b.ny, b.nz, b.nf,
                               b.isFloat, b.vectorGrid, b.image_sub_type
     return error_code
     """
-    return ReadIM.CreateBuffer(b, b.nx ,b.ny, b.nz, b.nf,
+    return core.CreateBuffer(b, b.nx ,b.ny, b.nz, b.nf,
                         b.isFloat, b.vectorGrid, b.image_sub_type)
 
 def createBuffer_davis(buff):
@@ -178,7 +178,7 @@ def createBuffer_davis(buff):
     creates
     return b, error_code
     """
-    b = ReadIM.BufferType()
+    b = core.BufferType()
     b.nx = buff.nx
     b.ny = buff.ny
     b.nz = buff.nz
@@ -186,7 +186,7 @@ def createBuffer_davis(buff):
     b.isFloat = buff.isFloat
     b.vectorGrid = buff.vectorGrid
     b.image_sub_type = buff.image_sub_type
-    error_code = ReadIM.CreateBuffer(b, b.nx ,b.ny, b.nz, b.nf,
+    error_code = core.CreateBuffer(b, b.nx ,b.ny, b.nz, b.nf,
                         b.isFloat, b.vectorGrid, b.image_sub_type)
 
     #transfer buffer info from v. Useful for writing files.
@@ -202,31 +202,31 @@ def get_Buffer_andAttributeList(filename, buff=None,atts=None):
         and attribute_list
         Both of which which need to eventually be destroyed (otherwise memory leaks)
 
-        ReadIM.DestroyBuffer(buff)
-        ReadIM.DestroyAttributeList2(atttributes.next)
+        core.DestroyBuffer(buff)
+        core.DestroyAttributeList2(atttributes.next)
     """
     if not os.path.isfile(filename): raise IOError, 'file not found %s' %filename
 
-    if buff is None: buff = ReadIM.BufferType()
-    if atts is None: atts = ReadIM.AttributeList()
+    if buff is None: buff = core.BufferType()
+    if atts is None: atts = core.AttributeList()
 
     try:
-        err = ReadIM.ReadSpec2(filename, buff, atts)
+        err = core.ReadSpec2(filename, buff, atts)
     except:
-        ReadIM.DestroyBuffer(buffer)
+        core.DestroyBuffer(buffer)
 
     if True:
-        if err == ReadIM.IMREAD_ERR_FILEOPEN: raise IOError, 'File not found'
-        elif err == ReadIM.IMREAD_ERR_HEADER: raise IOError,'Error in header'
-        elif err == ReadIM.IMREAD_ERR_FORMAT: raise IOError, 'Error in format'
-        elif err == ReadIM.IMREAD_ERR_DATA:   raise IOError, 'Error while reading data'
-        elif err == ReadIM.IMREAD_ERR_MEMORY: raise IOError, 'Error out of memory'
+        if err == core.IMREAD_ERR_FILEOPEN: raise IOError, 'File not found'
+        elif err == core.IMREAD_ERR_HEADER: raise IOError,'Error in header'
+        elif err == core.IMREAD_ERR_FORMAT: raise IOError, 'Error in format'
+        elif err == core.IMREAD_ERR_DATA:   raise IOError, 'Error while reading data'
+        elif err == core.IMREAD_ERR_MEMORY: raise IOError, 'Error out of memory'
         elif err > 0: raise IOError, 'Unkown Error code: %s' % err
 
     return buff, atts
 
 def __newBuffer__(window ,nx=None, ny=None, vectorGrid=24,
-                     image_sub_type=ReadIM.BUFFER_FORMAT_VECTOR_2D,
+                     image_sub_type=core.BUFFER_FORMAT_VECTOR_2D,
                      frames=1,scaleIoffset=0, scaleIfactor=1, alternate_buff=False):
 
     """ window [(x,y),(x,y)] --> [top left, bottom right]
@@ -237,7 +237,7 @@ def __newBuffer__(window ,nx=None, ny=None, vectorGrid=24,
     if not ny:
         ny = window[0][1] - window[1][1]
 
-    buff = ReadIM.BufferType()
+    buff = core.BufferType()
 
     buff.image_sub_type = int(image_sub_type)
     buff.nx = int(nx)
@@ -259,7 +259,7 @@ def __newBuffer__(window ,nx=None, ny=None, vectorGrid=24,
 
     return buff
 
-def newBuffer(window ,nx=None, ny=None, vectorGrid=24, image_sub_type=ReadIM.BUFFER_FORMAT_VECTOR_2D, frames=1, alternate_buff=True):
+def newBuffer(window ,nx=None, ny=None, vectorGrid=24, image_sub_type=core.BUFFER_FORMAT_VECTOR_2D, frames=1, alternate_buff=True):
     """
     window [(x,y),(x,y)] --> [top left, bottom right]
     Returns a compliant buffertype with alternate format
@@ -272,17 +272,17 @@ def newBuffer(window ,nx=None, ny=None, vectorGrid=24, image_sub_type=ReadIM.BUF
 
 def load_AttributeList(atts={}):
     """
-    load the dictionary into a ReadIM.AttributeList
+    load the dictionary into a core.AttributeList
     AttributeList = loadAttributeList(dict)
 
      AttributeList needs to eventually be destroyed (otherwise memory leaks)
-     ReadIM.DestroyAttributeList2(Attatttributesxt)
+     core.DestroyAttributeList2(Attatttributesxt)
     """
-    attlist = ReadIM.AttributeList()
+    attlist = core.AttributeList()
     a = attlist
 
     for key in atts:
-        a.next  = ReadIM.AttributeList()
+        a.next  = core.AttributeList()
         a       = a.next
         a.name  = key
         a.value = str(atts[key])
@@ -296,10 +296,10 @@ def buffer_as_array(buff):
     first axis is like a frame (sometimes there are multiple frames)
     [offset::dims] will return all the components for an axis
 
-    a, buff = np.array([components*nf,nx,ny]), ReadIM.BufferType
-    where: components = ReadIM.GetVectorComponents(buff.image_sub_type) * buff.nf
+    a, buff = np.array([components*nf,nx,ny]), core.BufferType
+    where: components = core.GetVectorComponents(buff.image_sub_type) * buff.nf
 
-    you must destroy buff manually with ReadIM.DestroyBuffer(buff) also del(a) is necessary
+    you must destroy buff manually with core.DestroyBuffer(buff) also del(a) is necessary
 
     suitable for BufferTypeAlt objects and writing data.
     """
@@ -315,7 +315,7 @@ def buffer_as_array(buff):
         raise MemoryError, 'No buffer available'
 
     if buff.image_sub_type > 0:
-        components = ReadIM.GetVectorComponents(buff.image_sub_type)
+        components = core.GetVectorComponents(buff.image_sub_type)
     else:
         components = 1 # for images at the moment
     components *= buff.nf
@@ -329,10 +329,10 @@ def buffer_mask_as_array(buff):
     first axis is like a frame (sometimes there are multiple frames)
     [offset::dims] will return all the components for an axis
 
-    a, buff = np.array([components*nf,nx,ny]), ReadIM.BufferType
-    where: components = ReadIM.GetVectorComponents(buff.image_sub_type) * buff.nf
+    a, buff = np.array([components*nf,nx,ny]), core.BufferType
+    where: components = core.GetVectorComponents(buff.image_sub_type) * buff.nf
 
-    you must destroy buff manually with ReadIM.DestroyBuffer(buff) also del(a) is necessary
+    you must destroy buff manually with core.DestroyBuffer(buff) also del(a) is necessary
 
     suitable for BufferTypeAlt objects and writing data.
     """
@@ -356,6 +356,6 @@ def att2dict(att, destroy=True):
         out[attn.name] = attn.value
         attn = attn.next
     if att.next and destroy:
-        ReadIM.DestroyAttributeList2(att.next)
+        core.DestroyAttributeList2(att.next)
     return out
 

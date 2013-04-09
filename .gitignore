@@ -1,0 +1,12 @@
+
+/build
+/dist/*.exe
+/*.pyc
+
+/*.bak
+
+/sample/*.im7
+
+/sample/new.vc7
+
+/ReadIM/core.py

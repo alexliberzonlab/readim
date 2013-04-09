@@ -35,7 +35,7 @@ for s in scs:
     assert os.path.isfile(s)
 
 extra_link_args     = []#['-IReadIM/src', '-IReadIM/src/zlib']
-extra_compile_args  =[]# ['-IReadIM/src', '-IReadIM/src/zlib']
+extra_compile_args  =['-IReadIM/src', '-IReadIM/src/zlib']
 ##ifile               = os.path.abspath('ReadIM/core.i')
 ##assert os.path.isfile(ifile)
 
