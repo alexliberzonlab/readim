@@ -14,7 +14,7 @@
 
    The function returns the error codes of ImReadError_t.
 */
-	 
+
 #include "ReadIMX.h"
 #include "ReadIM7.h"
 #include "zlib/zlib.h"
@@ -29,8 +29,13 @@ uint64 FileGetPosition( FILE *p_pFile )
 	fgetpos( p_pFile, &pos );
 	return pos.__pos;
 #	else
+
+#    ifdef __MINGW32__
+    nPos = ftello64( p_pFile );
+#   else
 	nPos = _ftelli64( p_pFile );
 #	endif
+#   endif
 	return nPos;
 }
 
@@ -38,7 +43,7 @@ uint64 FileGetPosition( FILE *p_pFile )
 enum IM7PackType_t
 {
 	IM7_PACKTYPE__UNCOMPR= 0x1000,// autoselect uncompressed
-	IM7_PACKTYPE__FAST,				// autoselect fastest packtype, 
+	IM7_PACKTYPE__FAST,				// autoselect fastest packtype,
 	IM7_PACKTYPE__SIZE,				// autoselect packtype with smallest resulting file
 	IM7_PACKTYPE_IMG			= 0,	// uncompressed, like IMG
 	IM7_PACKTYPE_IMX,					// old version compression, like IMX
@@ -90,7 +95,7 @@ ImReadError_t SCPackZlib_Read( FILE* theFile, BufferType* myBuffer )
 		return IMREAD_ERR_MEMORY;
 	}
 	fread( source, 1, sourceLen, theFile );
-	
+
 	uLongf destLen = 0;
 	Bytef *dest = Buffer_GetRowAddrAndSize(myBuffer,0,destLen);
 	destLen *= myBuffer->totalLines;
@@ -488,7 +493,7 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	{	// just END attribute
 		WriteAttribute_END( theFile );
 	}
-	
+
 	fclose(theFile);
 	return 0;
 }
