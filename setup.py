@@ -18,30 +18,31 @@ import subprocess, sys, os
 import glob
 
 
-##try:
-##    p= subprocess.check_call(['swig', '-python', '-c++' ,'src/core.i'])
-##except:
-##    print 'unable to run swig! is it installed?. Will try to perform action anyway...'
-##
-##scs = ['core_wrap.cxx', 'ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
-##        'zlib/adler32.c','zlib/deflate.c','zlib/infcodes.c',
-##        'zlib/inflate.c','zlib/infutil.c', 'zlib/uncompr.c',
-##         'zlib/compress.c','zlib/infblock.c','zlib/inffast.c',
-##        'zlib/inftrees.c','zlib/trees.c','zlib/zutil.c']
-##
-##scs = ['src/'+s for s in scs]
-##for s in scs:
-##    assert os.path.isfile(s)
+try:
+    p= subprocess.check_call(['swig', '-python', '-c++' ,'ReadIM/core.i'])
+except:
+    print 'unable to run swig! is it installed?. Will try to perform action anyway...'
 
-extra_link_args     = ['-I./src', '-I./src/zlib']
-extra_compile_args  = ['-I./src', '-I./src/zlib']
+scs = ['ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
+        'zlib/adler32.c','zlib/deflate.c','zlib/infcodes.c',
+        'zlib/inflate.c','zlib/infutil.c', 'zlib/uncompr.c',
+         'zlib/compress.c','zlib/infblock.c','zlib/inffast.c',
+        'zlib/inftrees.c','zlib/trees.c','zlib/zutil.c']
+
+scs = ['ReadIM/src/'+s for s in scs]
+scs = ['ReadIM/core_wrap.cxx'] + scs
+for s in scs:
+    assert os.path.isfile(s)
+
+extra_link_args     = []#['-IReadIM/src', '-IReadIM/src/zlib']
+extra_compile_args  =[]# ['-IReadIM/src', '-IReadIM/src/zlib']
 ##ifile               = os.path.abspath('ReadIM/core.i')
 ##assert os.path.isfile(ifile)
 
 ReadIMX_module = Extension('ReadIM._core',
-                            ['ReadIM/core.i'],
-                            swig_opts=['-modern', '-c++', '-I./src'],
-##                            sources=scs,
+##                            ['ReadIM/core.i'],
+##                            swig_opts=['-modern', '-c++', '-IReadIM/src'],
+                            sources=scs,
                             extra_compile_args = extra_compile_args,
                             extra_link_args = extra_link_args)
 if len(sys.argv) < 2:
