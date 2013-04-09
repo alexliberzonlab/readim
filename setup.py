@@ -19,8 +19,9 @@ import glob
 
 
 try:
-    p= subprocess.check_call(['swig', '-python', '-c++' ,'ReadIM/core.i'])
+    p= subprocess.check_call(['swig', '-python', '-c++' , '-IReadIM/src', 'ReadIM/core.i'])
 except:
+    raise
     print 'unable to run swig! is it installed?. Will try to perform action anyway...'
 
 scs = ['ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
@@ -67,7 +68,7 @@ setup (name = 'ReadIM_bin',
        author      = "Alan Fleming + LaVision",
        description = "Python wrapper for reading and writing LaVision IMX files. Thanks to LaVision for providing original code.",
        ext_modules = [ReadIMX_module],
-       py_modules = ['ReadIM', 'ReadIM.core'],
+       py_modules = ['ReadIM'],#['ReadIM', 'ReadIM.core'],
        packages = ['ReadIM'],
        package_data = {'ReadIM':['*.dll','sample/*.*']},
        include_package_data = True,
