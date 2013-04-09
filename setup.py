@@ -3,28 +3,50 @@
 """
 setup.py file for SWIG example
 """
+
+version = '0.4.0'
+
 #include "Python.h"
-from distutils.core import setup, Extension
-import subprocess, sys
+from distribute_setup import use_setuptools
+use_setuptools()
 
-try:
-    p= subprocess.check_call(['swig', '-python', '-c++' ,'ReadIM.i'])
-except:
-    print 'unable to run swig! is it installed?. Will try to perform action anyway...'
+##from distutils.core import setup, Extension
 
-scs = ['ReadIM_wrap.cxx', 'ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
-        r'zlib\adler32.c',r'zlib\deflate.c',r'zlib\infcodes.c',
-        r'zlib\inflate.c',r'zlib\infutil.c', r'zlib\uncompr.c',
-         r'zlib\compress.c',r'zlib\infblock.c',r'zlib\inffast.c',
-        r'zlib\inftrees.c',r'zlib\trees.c',r'zlib\zutil.c']
+from setuptools import setup, find_packages, Extension
 
-ReadIMX_module = Extension('_ReadIM',
-                           sources=scs,
-                           )
+import subprocess, sys, os
+import glob
+
+
+##try:
+##    p= subprocess.check_call(['swig', '-python', '-c++' ,'src/core.i'])
+##except:
+##    print 'unable to run swig! is it installed?. Will try to perform action anyway...'
+##
+##scs = ['core_wrap.cxx', 'ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
+##        'zlib/adler32.c','zlib/deflate.c','zlib/infcodes.c',
+##        'zlib/inflate.c','zlib/infutil.c', 'zlib/uncompr.c',
+##         'zlib/compress.c','zlib/infblock.c','zlib/inffast.c',
+##        'zlib/inftrees.c','zlib/trees.c','zlib/zutil.c']
+##
+##scs = ['src/'+s for s in scs]
+##for s in scs:
+##    assert os.path.isfile(s)
+
+extra_link_args     = ['-I./src', '-I./src/zlib']
+extra_compile_args  = ['-I./src', '-I./src/zlib']
+##ifile               = os.path.abspath('ReadIM/core.i')
+##assert os.path.isfile(ifile)
+
+ReadIMX_module = Extension('ReadIM._core',
+                            ['ReadIM/core.i'],
+                            swig_opts=['-modern', '-c++', '-I./src'],
+##                            sources=scs,
+                            extra_compile_args = extra_compile_args,
+                            extra_link_args = extra_link_args)
 if len(sys.argv) < 2:
-    script_args = ['build', '--compiler=mingw32', 'install', 'bdist_wininst']
-    script_args = ['build', 'install'] # does not really work for a 32 bit system
-    script_args = ['build', 'install', 'bdist_wininst'] # does not really work for a 32 bit system
+    script_args = ['bdist_wininst']
+
 else:
     script_args = sys.argv[1:]
 
@@ -36,12 +58,19 @@ license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc
   href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons\
    Attribution-NonCommercial 3.0 Unported License</a>.
    """
-setup (name = 'ReadIM',
-       version = '0.3.4',
+
+sys.path.insert(1, os.path.abspath('ReadIM')) # to give access to core.py
+
+setup (name = 'ReadIM_bin',
+       version = version,
        author      = "Alan Fleming + LaVision",
        description = "Python wrapper for reading and writing LaVision IMX files. Thanks to LaVision for providing original code.",
        ext_modules = [ReadIMX_module],
-       py_modules = ["ReadIM", "ReadIMextra"],
+       py_modules = ['ReadIM', 'ReadIM.core'],
+       packages = ['ReadIM'],
+       package_data = {'ReadIM':['*.dll','sample/*.*']},
+       include_package_data = True,
+       install_requires=['setuptools'],
        script_args = script_args,
        license = license
        )

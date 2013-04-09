@@ -3,7 +3,6 @@
 #
 # Do not make changes to this file unless you know what you are doing--modify
 # the SWIG interface file instead.
-# This file is compatible with both classic and new-style classes.
 
 from sys import version_info
 if version_info >= (2,6,0):
@@ -66,30 +65,29 @@ except AttributeError:
     _newclass = 0
 
 
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if (name == "thisown"): return self.this.own(value)
+        if hasattr(self,name) or (name == "this"):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 IMREAD_ERR_NO = _ReadIM.IMREAD_ERR_NO
 IMREAD_ERR_FILEOPEN = _ReadIM.IMREAD_ERR_FILEOPEN
 IMREAD_ERR_HEADER = _ReadIM.IMREAD_ERR_HEADER
 IMREAD_ERR_FORMAT = _ReadIM.IMREAD_ERR_FORMAT
 IMREAD_ERR_DATA = _ReadIM.IMREAD_ERR_DATA
 IMREAD_ERR_MEMORY = _ReadIM.IMREAD_ERR_MEMORY
-class BufferScaleType(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, BufferScaleType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, BufferScaleType, name)
+class BufferScaleType(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    __swig_setmethods__["factor"] = _ReadIM.BufferScaleType_factor_set
-    __swig_getmethods__["factor"] = _ReadIM.BufferScaleType_factor_get
-    if _newclass:factor = _swig_property(_ReadIM.BufferScaleType_factor_get, _ReadIM.BufferScaleType_factor_set)
-    __swig_setmethods__["offset"] = _ReadIM.BufferScaleType_offset_set
-    __swig_getmethods__["offset"] = _ReadIM.BufferScaleType_offset_get
-    if _newclass:offset = _swig_property(_ReadIM.BufferScaleType_offset_get, _ReadIM.BufferScaleType_offset_set)
-    __swig_setmethods__["description"] = _ReadIM.BufferScaleType_description_set
-    __swig_getmethods__["description"] = _ReadIM.BufferScaleType_description_get
-    if _newclass:description = _swig_property(_ReadIM.BufferScaleType_description_get, _ReadIM.BufferScaleType_description_set)
-    __swig_setmethods__["unit"] = _ReadIM.BufferScaleType_unit_set
-    __swig_getmethods__["unit"] = _ReadIM.BufferScaleType_unit_get
-    if _newclass:unit = _swig_property(_ReadIM.BufferScaleType_unit_get, _ReadIM.BufferScaleType_unit_set)
+    factor = _swig_property(_ReadIM.BufferScaleType_factor_get, _ReadIM.BufferScaleType_factor_set)
+    offset = _swig_property(_ReadIM.BufferScaleType_offset_get, _ReadIM.BufferScaleType_offset_set)
+    description = _swig_property(_ReadIM.BufferScaleType_description_get, _ReadIM.BufferScaleType_description_set)
+    unit = _swig_property(_ReadIM.BufferScaleType_unit_get, _ReadIM.BufferScaleType_unit_set)
     def __init__(self): 
         this = _ReadIM.new_BufferScaleType()
         try: self.this.append(this)
@@ -114,54 +112,23 @@ BUFFER_FORMAT_VECTOR_3D_EXTENDED_PEAK = _ReadIM.BUFFER_FORMAT_VECTOR_3D_EXTENDED
 BUFFER_FORMAT_COLOR = _ReadIM.BUFFER_FORMAT_COLOR
 BUFFER_FORMAT_RGB_MATRIX = _ReadIM.BUFFER_FORMAT_RGB_MATRIX
 BUFFER_FORMAT_RGB_32 = _ReadIM.BUFFER_FORMAT_RGB_32
-class BufferType(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, BufferType, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, BufferType, name)
+class BufferType(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    __swig_setmethods__["isFloat"] = _ReadIM.BufferType_isFloat_set
-    __swig_getmethods__["isFloat"] = _ReadIM.BufferType_isFloat_get
-    if _newclass:isFloat = _swig_property(_ReadIM.BufferType_isFloat_get, _ReadIM.BufferType_isFloat_set)
-    __swig_setmethods__["nx"] = _ReadIM.BufferType_nx_set
-    __swig_getmethods__["nx"] = _ReadIM.BufferType_nx_get
-    if _newclass:nx = _swig_property(_ReadIM.BufferType_nx_get, _ReadIM.BufferType_nx_set)
-    __swig_setmethods__["ny"] = _ReadIM.BufferType_ny_set
-    __swig_getmethods__["ny"] = _ReadIM.BufferType_ny_get
-    if _newclass:ny = _swig_property(_ReadIM.BufferType_ny_get, _ReadIM.BufferType_ny_set)
-    __swig_setmethods__["nz"] = _ReadIM.BufferType_nz_set
-    __swig_getmethods__["nz"] = _ReadIM.BufferType_nz_get
-    if _newclass:nz = _swig_property(_ReadIM.BufferType_nz_get, _ReadIM.BufferType_nz_set)
-    __swig_setmethods__["nf"] = _ReadIM.BufferType_nf_set
-    __swig_getmethods__["nf"] = _ReadIM.BufferType_nf_get
-    if _newclass:nf = _swig_property(_ReadIM.BufferType_nf_get, _ReadIM.BufferType_nf_set)
-    __swig_setmethods__["totalLines"] = _ReadIM.BufferType_totalLines_set
-    __swig_getmethods__["totalLines"] = _ReadIM.BufferType_totalLines_get
-    if _newclass:totalLines = _swig_property(_ReadIM.BufferType_totalLines_get, _ReadIM.BufferType_totalLines_set)
-    __swig_setmethods__["vectorGrid"] = _ReadIM.BufferType_vectorGrid_set
-    __swig_getmethods__["vectorGrid"] = _ReadIM.BufferType_vectorGrid_get
-    if _newclass:vectorGrid = _swig_property(_ReadIM.BufferType_vectorGrid_get, _ReadIM.BufferType_vectorGrid_set)
-    __swig_setmethods__["image_sub_type"] = _ReadIM.BufferType_image_sub_type_set
-    __swig_getmethods__["image_sub_type"] = _ReadIM.BufferType_image_sub_type_get
-    if _newclass:image_sub_type = _swig_property(_ReadIM.BufferType_image_sub_type_get, _ReadIM.BufferType_image_sub_type_set)
-    __swig_setmethods__["floatArray"] = _ReadIM.BufferType_floatArray_set
-    __swig_getmethods__["floatArray"] = _ReadIM.BufferType_floatArray_get
-    if _newclass:floatArray = _swig_property(_ReadIM.BufferType_floatArray_get, _ReadIM.BufferType_floatArray_set)
-    __swig_setmethods__["wordArray"] = _ReadIM.BufferType_wordArray_set
-    __swig_getmethods__["wordArray"] = _ReadIM.BufferType_wordArray_get
-    if _newclass:wordArray = _swig_property(_ReadIM.BufferType_wordArray_get, _ReadIM.BufferType_wordArray_set)
-    __swig_setmethods__["scaleX"] = _ReadIM.BufferType_scaleX_set
-    __swig_getmethods__["scaleX"] = _ReadIM.BufferType_scaleX_get
-    if _newclass:scaleX = _swig_property(_ReadIM.BufferType_scaleX_get, _ReadIM.BufferType_scaleX_set)
-    __swig_setmethods__["scaleY"] = _ReadIM.BufferType_scaleY_set
-    __swig_getmethods__["scaleY"] = _ReadIM.BufferType_scaleY_get
-    if _newclass:scaleY = _swig_property(_ReadIM.BufferType_scaleY_get, _ReadIM.BufferType_scaleY_set)
-    __swig_setmethods__["scaleI"] = _ReadIM.BufferType_scaleI_set
-    __swig_getmethods__["scaleI"] = _ReadIM.BufferType_scaleI_get
-    if _newclass:scaleI = _swig_property(_ReadIM.BufferType_scaleI_get, _ReadIM.BufferType_scaleI_set)
-    __swig_setmethods__["bMaskArray"] = _ReadIM.BufferType_bMaskArray_set
-    __swig_getmethods__["bMaskArray"] = _ReadIM.BufferType_bMaskArray_get
-    if _newclass:bMaskArray = _swig_property(_ReadIM.BufferType_bMaskArray_get, _ReadIM.BufferType_bMaskArray_set)
+    isFloat = _swig_property(_ReadIM.BufferType_isFloat_get, _ReadIM.BufferType_isFloat_set)
+    nx = _swig_property(_ReadIM.BufferType_nx_get, _ReadIM.BufferType_nx_set)
+    ny = _swig_property(_ReadIM.BufferType_ny_get, _ReadIM.BufferType_ny_set)
+    nz = _swig_property(_ReadIM.BufferType_nz_get, _ReadIM.BufferType_nz_set)
+    nf = _swig_property(_ReadIM.BufferType_nf_get, _ReadIM.BufferType_nf_set)
+    totalLines = _swig_property(_ReadIM.BufferType_totalLines_get, _ReadIM.BufferType_totalLines_set)
+    vectorGrid = _swig_property(_ReadIM.BufferType_vectorGrid_get, _ReadIM.BufferType_vectorGrid_set)
+    image_sub_type = _swig_property(_ReadIM.BufferType_image_sub_type_get, _ReadIM.BufferType_image_sub_type_set)
+    floatArray = _swig_property(_ReadIM.BufferType_floatArray_get, _ReadIM.BufferType_floatArray_set)
+    wordArray = _swig_property(_ReadIM.BufferType_wordArray_get, _ReadIM.BufferType_wordArray_set)
+    scaleX = _swig_property(_ReadIM.BufferType_scaleX_get, _ReadIM.BufferType_scaleX_set)
+    scaleY = _swig_property(_ReadIM.BufferType_scaleY_get, _ReadIM.BufferType_scaleY_set)
+    scaleI = _swig_property(_ReadIM.BufferType_scaleI_get, _ReadIM.BufferType_scaleI_set)
+    bMaskArray = _swig_property(_ReadIM.BufferType_bMaskArray_get, _ReadIM.BufferType_bMaskArray_set)
     def __init__(self): 
         this = _ReadIM.new_BufferType()
         try: self.this.append(this)
@@ -171,21 +138,12 @@ class BufferType(_object):
 BufferType_swigregister = _ReadIM.BufferType_swigregister
 BufferType_swigregister(BufferType)
 
-class AttributeList(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, AttributeList, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, AttributeList, name)
+class AttributeList(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    __swig_setmethods__["name"] = _ReadIM.AttributeList_name_set
-    __swig_getmethods__["name"] = _ReadIM.AttributeList_name_get
-    if _newclass:name = _swig_property(_ReadIM.AttributeList_name_get, _ReadIM.AttributeList_name_set)
-    __swig_setmethods__["value"] = _ReadIM.AttributeList_value_set
-    __swig_getmethods__["value"] = _ReadIM.AttributeList_value_get
-    if _newclass:value = _swig_property(_ReadIM.AttributeList_value_get, _ReadIM.AttributeList_value_set)
-    __swig_setmethods__["next"] = _ReadIM.AttributeList_next_set
-    __swig_getmethods__["next"] = _ReadIM.AttributeList_next_get
-    if _newclass:next = _swig_property(_ReadIM.AttributeList_next_get, _ReadIM.AttributeList_next_set)
+    name = _swig_property(_ReadIM.AttributeList_name_get, _ReadIM.AttributeList_name_set)
+    value = _swig_property(_ReadIM.AttributeList_value_get, _ReadIM.AttributeList_value_set)
+    next = _swig_property(_ReadIM.AttributeList_next_get, _ReadIM.AttributeList_next_set)
     def __init__(self): 
         this = _ReadIM.new_AttributeList()
         try: self.this.append(this)
@@ -272,48 +230,21 @@ WriteIMGXAttr = _ReadIM.WriteIMGXAttr
 IMAGE_EXTRA_OFFSET_TAIL = _ReadIM.IMAGE_EXTRA_OFFSET_TAIL
 IMAGE_EXTRA_2 = _ReadIM.IMAGE_EXTRA_2
 IMAGE_EXTRA_3 = _ReadIM.IMAGE_EXTRA_3
-class Image_Header_7(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Image_Header_7, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Image_Header_7, name)
+class Image_Header_7(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    __swig_setmethods__["version"] = _ReadIM.Image_Header_7_version_set
-    __swig_getmethods__["version"] = _ReadIM.Image_Header_7_version_get
-    if _newclass:version = _swig_property(_ReadIM.Image_Header_7_version_get, _ReadIM.Image_Header_7_version_set)
-    __swig_setmethods__["pack_type"] = _ReadIM.Image_Header_7_pack_type_set
-    __swig_getmethods__["pack_type"] = _ReadIM.Image_Header_7_pack_type_get
-    if _newclass:pack_type = _swig_property(_ReadIM.Image_Header_7_pack_type_get, _ReadIM.Image_Header_7_pack_type_set)
-    __swig_setmethods__["buffer_format"] = _ReadIM.Image_Header_7_buffer_format_set
-    __swig_getmethods__["buffer_format"] = _ReadIM.Image_Header_7_buffer_format_get
-    if _newclass:buffer_format = _swig_property(_ReadIM.Image_Header_7_buffer_format_get, _ReadIM.Image_Header_7_buffer_format_set)
-    __swig_setmethods__["isSparse"] = _ReadIM.Image_Header_7_isSparse_set
-    __swig_getmethods__["isSparse"] = _ReadIM.Image_Header_7_isSparse_get
-    if _newclass:isSparse = _swig_property(_ReadIM.Image_Header_7_isSparse_get, _ReadIM.Image_Header_7_isSparse_set)
-    __swig_setmethods__["sizeX"] = _ReadIM.Image_Header_7_sizeX_set
-    __swig_getmethods__["sizeX"] = _ReadIM.Image_Header_7_sizeX_get
-    if _newclass:sizeX = _swig_property(_ReadIM.Image_Header_7_sizeX_get, _ReadIM.Image_Header_7_sizeX_set)
-    __swig_setmethods__["sizeY"] = _ReadIM.Image_Header_7_sizeY_set
-    __swig_getmethods__["sizeY"] = _ReadIM.Image_Header_7_sizeY_get
-    if _newclass:sizeY = _swig_property(_ReadIM.Image_Header_7_sizeY_get, _ReadIM.Image_Header_7_sizeY_set)
-    __swig_setmethods__["sizeZ"] = _ReadIM.Image_Header_7_sizeZ_set
-    __swig_getmethods__["sizeZ"] = _ReadIM.Image_Header_7_sizeZ_get
-    if _newclass:sizeZ = _swig_property(_ReadIM.Image_Header_7_sizeZ_get, _ReadIM.Image_Header_7_sizeZ_set)
-    __swig_setmethods__["sizeF"] = _ReadIM.Image_Header_7_sizeF_set
-    __swig_getmethods__["sizeF"] = _ReadIM.Image_Header_7_sizeF_get
-    if _newclass:sizeF = _swig_property(_ReadIM.Image_Header_7_sizeF_get, _ReadIM.Image_Header_7_sizeF_set)
-    __swig_setmethods__["scalarN"] = _ReadIM.Image_Header_7_scalarN_set
-    __swig_getmethods__["scalarN"] = _ReadIM.Image_Header_7_scalarN_get
-    if _newclass:scalarN = _swig_property(_ReadIM.Image_Header_7_scalarN_get, _ReadIM.Image_Header_7_scalarN_set)
-    __swig_setmethods__["vector_grid"] = _ReadIM.Image_Header_7_vector_grid_set
-    __swig_getmethods__["vector_grid"] = _ReadIM.Image_Header_7_vector_grid_get
-    if _newclass:vector_grid = _swig_property(_ReadIM.Image_Header_7_vector_grid_get, _ReadIM.Image_Header_7_vector_grid_set)
-    __swig_setmethods__["extraFlags"] = _ReadIM.Image_Header_7_extraFlags_set
-    __swig_getmethods__["extraFlags"] = _ReadIM.Image_Header_7_extraFlags_get
-    if _newclass:extraFlags = _swig_property(_ReadIM.Image_Header_7_extraFlags_get, _ReadIM.Image_Header_7_extraFlags_set)
-    __swig_setmethods__["reserved"] = _ReadIM.Image_Header_7_reserved_set
-    __swig_getmethods__["reserved"] = _ReadIM.Image_Header_7_reserved_get
-    if _newclass:reserved = _swig_property(_ReadIM.Image_Header_7_reserved_get, _ReadIM.Image_Header_7_reserved_set)
+    version = _swig_property(_ReadIM.Image_Header_7_version_get, _ReadIM.Image_Header_7_version_set)
+    pack_type = _swig_property(_ReadIM.Image_Header_7_pack_type_get, _ReadIM.Image_Header_7_pack_type_set)
+    buffer_format = _swig_property(_ReadIM.Image_Header_7_buffer_format_get, _ReadIM.Image_Header_7_buffer_format_set)
+    isSparse = _swig_property(_ReadIM.Image_Header_7_isSparse_get, _ReadIM.Image_Header_7_isSparse_set)
+    sizeX = _swig_property(_ReadIM.Image_Header_7_sizeX_get, _ReadIM.Image_Header_7_sizeX_set)
+    sizeY = _swig_property(_ReadIM.Image_Header_7_sizeY_get, _ReadIM.Image_Header_7_sizeY_set)
+    sizeZ = _swig_property(_ReadIM.Image_Header_7_sizeZ_get, _ReadIM.Image_Header_7_sizeZ_set)
+    sizeF = _swig_property(_ReadIM.Image_Header_7_sizeF_get, _ReadIM.Image_Header_7_sizeF_set)
+    scalarN = _swig_property(_ReadIM.Image_Header_7_scalarN_get, _ReadIM.Image_Header_7_scalarN_set)
+    vector_grid = _swig_property(_ReadIM.Image_Header_7_vector_grid_get, _ReadIM.Image_Header_7_vector_grid_set)
+    extraFlags = _swig_property(_ReadIM.Image_Header_7_extraFlags_get, _ReadIM.Image_Header_7_extraFlags_set)
+    reserved = _swig_property(_ReadIM.Image_Header_7_reserved_get, _ReadIM.Image_Header_7_reserved_set)
     def __init__(self): 
         this = _ReadIM.new_Image_Header_7()
         try: self.this.append(this)
@@ -323,15 +254,10 @@ class Image_Header_7(_object):
 Image_Header_7_swigregister = _ReadIM.Image_Header_7_swigregister
 Image_Header_7_swigregister(Image_Header_7)
 
-class Image_Tail_7(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Image_Tail_7, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, Image_Tail_7, name)
+class Image_Tail_7(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
-    __swig_setmethods__["offset"] = _ReadIM.Image_Tail_7_offset_set
-    __swig_getmethods__["offset"] = _ReadIM.Image_Tail_7_offset_get
-    if _newclass:offset = _swig_property(_ReadIM.Image_Tail_7_offset_get, _ReadIM.Image_Tail_7_offset_set)
+    offset = _swig_property(_ReadIM.Image_Tail_7_offset_get, _ReadIM.Image_Tail_7_offset_set)
     def __init__(self): 
         this = _ReadIM.new_Image_Tail_7()
         try: self.this.append(this)
@@ -401,11 +327,8 @@ floatp_assign = _ReadIM.floatp_assign
 def floatp_value(*args):
   return _ReadIM.floatp_value(*args)
 floatp_value = _ReadIM.floatp_value
-class dPtr(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, dPtr, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, dPtr, name)
+class dPtr(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self): 
         this = _ReadIM.new_dPtr()
@@ -416,8 +339,7 @@ class dPtr(_object):
     def assign(self, *args): return _ReadIM.dPtr_assign(self, *args)
     def value(self): return _ReadIM.dPtr_value(self)
     def cast(self): return _ReadIM.dPtr_cast(self)
-    __swig_getmethods__["frompointer"] = lambda x: _ReadIM.dPtr_frompointer
-    if _newclass:frompointer = staticmethod(_ReadIM.dPtr_frompointer)
+    frompointer = staticmethod(_ReadIM.dPtr_frompointer)
 dPtr_swigregister = _ReadIM.dPtr_swigregister
 dPtr_swigregister(dPtr)
 
@@ -425,11 +347,8 @@ def dPtr_frompointer(*args):
   return _ReadIM.dPtr_frompointer(*args)
 dPtr_frompointer = _ReadIM.dPtr_frompointer
 
-class cPtr(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, cPtr, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, cPtr, name)
+class cPtr(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self): 
         this = _ReadIM.new_cPtr()
@@ -440,8 +359,7 @@ class cPtr(_object):
     def assign(self, *args): return _ReadIM.cPtr_assign(self, *args)
     def value(self): return _ReadIM.cPtr_value(self)
     def cast(self): return _ReadIM.cPtr_cast(self)
-    __swig_getmethods__["frompointer"] = lambda x: _ReadIM.cPtr_frompointer
-    if _newclass:frompointer = staticmethod(_ReadIM.cPtr_frompointer)
+    frompointer = staticmethod(_ReadIM.cPtr_frompointer)
 cPtr_swigregister = _ReadIM.cPtr_swigregister
 cPtr_swigregister(cPtr)
 
@@ -449,11 +367,8 @@ def cPtr_frompointer(*args):
   return _ReadIM.cPtr_frompointer(*args)
 cPtr_frompointer = _ReadIM.cPtr_frompointer
 
-class useintArray(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, useintArray, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, useintArray, name)
+class useintArray(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
         this = _ReadIM.new_useintArray(*args)
@@ -464,8 +379,7 @@ class useintArray(_object):
     def __getitem__(self, *args): return _ReadIM.useintArray___getitem__(self, *args)
     def __setitem__(self, *args): return _ReadIM.useintArray___setitem__(self, *args)
     def cast(self): return _ReadIM.useintArray_cast(self)
-    __swig_getmethods__["frompointer"] = lambda x: _ReadIM.useintArray_frompointer
-    if _newclass:frompointer = staticmethod(_ReadIM.useintArray_frompointer)
+    frompointer = staticmethod(_ReadIM.useintArray_frompointer)
 useintArray_swigregister = _ReadIM.useintArray_swigregister
 useintArray_swigregister(useintArray)
 
@@ -473,11 +387,8 @@ def useintArray_frompointer(*args):
   return _ReadIM.useintArray_frompointer(*args)
 useintArray_frompointer = _ReadIM.useintArray_frompointer
 
-class usefloatArray(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, usefloatArray, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, usefloatArray, name)
+class usefloatArray(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
         this = _ReadIM.new_usefloatArray(*args)
@@ -488,8 +399,7 @@ class usefloatArray(_object):
     def __getitem__(self, *args): return _ReadIM.usefloatArray___getitem__(self, *args)
     def __setitem__(self, *args): return _ReadIM.usefloatArray___setitem__(self, *args)
     def cast(self): return _ReadIM.usefloatArray_cast(self)
-    __swig_getmethods__["frompointer"] = lambda x: _ReadIM.usefloatArray_frompointer
-    if _newclass:frompointer = staticmethod(_ReadIM.usefloatArray_frompointer)
+    frompointer = staticmethod(_ReadIM.usefloatArray_frompointer)
 usefloatArray_swigregister = _ReadIM.usefloatArray_swigregister
 usefloatArray_swigregister(usefloatArray)
 
@@ -497,11 +407,8 @@ def usefloatArray_frompointer(*args):
   return _ReadIM.usefloatArray_frompointer(*args)
 usefloatArray_frompointer = _ReadIM.usefloatArray_frompointer
 
-class usedoubleArray(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, usedoubleArray, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, usedoubleArray, name)
+class usedoubleArray(object):
+    thisown = _swig_property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args): 
         this = _ReadIM.new_usedoubleArray(*args)
@@ -512,8 +419,7 @@ class usedoubleArray(_object):
     def __getitem__(self, *args): return _ReadIM.usedoubleArray___getitem__(self, *args)
     def __setitem__(self, *args): return _ReadIM.usedoubleArray___setitem__(self, *args)
     def cast(self): return _ReadIM.usedoubleArray_cast(self)
-    __swig_getmethods__["frompointer"] = lambda x: _ReadIM.usedoubleArray_frompointer
-    if _newclass:frompointer = staticmethod(_ReadIM.usedoubleArray_frompointer)
+    frompointer = staticmethod(_ReadIM.usedoubleArray_frompointer)
 usedoubleArray_swigregister = _ReadIM.usedoubleArray_swigregister
 usedoubleArray_swigregister(usedoubleArray)
 
