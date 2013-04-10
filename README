@@ -1,13 +1,39 @@
-First see if a binary is available otherwise:
 
-For windows:
-To compile a new binary "double click" setup.py (assumes a suitable compiler is available and that swig is installed)
-binary (ReadIM[version,platform,python version].exe) can then be run from the dist folder.
+Overview
+========
+ReadIM is a c++ wrapper to load DaVis Images and Vectors.
+ReadIM is a 'low level' interface to C++ libraries provided by LaVision GMBH.
 
-Other platforms (untested):
-setup.py may otherwise be used as normal:
+Installation
+============
+The libraries have been compiled succesfully on Windows platforms with 64-bit and 32-bit python.
+The 64-bit version was complied using an Enthought distribution.
+The 32-bit version was compiled using a python-xy distribution.
 
-e.g.
->>>python setup.py build install
+Linux versions appear incompatible at this stage.
 
+You may attempt to compile your own version provided you have an appropriate
+compiler and SWIG installed.
+
+Only recommended for advanced users.
+
+>>> python setup.py build install
+
+
+Usage
+=====
+
+To load a .vc7 file run::
+
+    >>> vbuff, vatts   =  ReadIM.extra.get_Buffer_andAttributeList('filename.vc7')
+    >>> v_array, vbuff = ReadIM.extra.buffer_as_array(vbuff)
+
+similarly for a .im7 file run::
+
+    >>> vbuff, vatts   =  ReadIM.extra.get_Buffer_andAttributeList('filename.im7')
+    >>> v_array, vbuff = ReadIM.extra.buffer_as_array(vbuff)
+
+
+For higher level access to DaVis files the IM package is available at:
+https://bitbucket.org/fleming79/im
 

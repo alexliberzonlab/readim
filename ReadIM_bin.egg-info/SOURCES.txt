@@ -1,4 +1,5 @@
 README
+configobj.py
 setup.py
 ReadIM/__init__.py
 ReadIM/core.i

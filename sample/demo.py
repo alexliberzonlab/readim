@@ -1,7 +1,6 @@
 # Assumes that sample files B00001.im7 and B00001.VC7 are in the same folder as this file.
 
 import glob
-import ReadIMextra
 import ReadIM
 import os
 
@@ -11,18 +10,18 @@ imfile = glob.glob('*.im7')[0]
 
 # vector demo (two components)
 
-vbuff, vatts=  ReadIMextra.get_Buffer_andAttributeList(vecfile)
-v_array, vbuff = ReadIMextra.buffer_as_array(vbuff)
+vbuff, vatts=  ReadIM.extra.get_Buffer_andAttributeList(vecfile)
+v_array, vbuff = ReadIM.extra.buffer_as_array(vbuff)
 
 
-print 'attributes in %s\n' %vecfile,'-'*100,'\n',ReadIMextra.att2dict(vatts, False),'\n'*10
+print 'attributes in %s\n' %vecfile,'-'*100,'\n',ReadIM.extra.att2dict(vatts, False),'\n'*10
 
 # image demo (two frames)
 
-imbuff, imatts  =  ReadIMextra.get_Buffer_andAttributeList(imfile)
-i_array, ibuff     = ReadIMextra.buffer_as_array(imbuff)
+imbuff, imatts  =  ReadIM.extra.get_Buffer_andAttributeList(imfile)
+i_array, ibuff     = ReadIM.extra.buffer_as_array(imbuff)
 
-print 'attributes in %s\n' %imfile,'_'*100,'\n', ReadIMextra.att2dict(imatts, False)
+print 'attributes in %s\n' %imfile,'_'*100,'\n', ReadIM.extra.att2dict(imatts, False)
 
 
 # display all of buffer available.
@@ -48,7 +47,7 @@ res1 = ReadIM.WriteIM7(dst_im, True, imbuff, imatts.next)
 
 # note you will have to destroy the buffers when you are done using: But you need to make sure they have not already been destroyed them
 # sometimes it crashes at this point for no particular reason.
-##ReadIMextra.ReadIM.DestroyBuffer(vbuff)
-##ReadIMextra.ReadIM.DestroyBuffer(imbuff)
+##ReadIM.extra.ReadIM.DestroyBuffer(vbuff)
+##ReadIM.extra.ReadIM.DestroyBuffer(imbuff)
 
 
