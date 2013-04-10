@@ -35,23 +35,23 @@ for s in scs:
     assert os.path.isfile(s)
 
 extra_link_args     = []#['-IReadIM/src', '-IReadIM/src/zlib']
-extra_compile_args  =['-IReadIM/src', '-IReadIM/src/zlib']
-##ifile               = os.path.abspath('ReadIM/core.i')
-##assert os.path.isfile(ifile)
+extra_compile_args  =['-IReadIM/src']
 
 ReadIMX_module = Extension('ReadIM._core',
-##                            ['ReadIM/core.i'],
-##                            swig_opts=['-modern', '-c++', '-IReadIM/src'],
+# Auto SWIG doesn't work because the files are outputs 'core.py' to the current directory not ReadIM
+##                            ['core.i'], swig_opts=['-c++', '-IReadIM/src'],
+# Manual SWIG
                             sources=scs,
                             extra_compile_args = extra_compile_args,
                             extra_link_args = extra_link_args)
+
 if len(sys.argv) < 2:
     script_args = ['bdist_wininst']
 
 else:
     script_args = sys.argv[1:]
 
-license = """This is the license\n"""
+
 license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">\
 <img alt="Creative Commons License" style="border-width:0"\
  src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" />\
@@ -59,21 +59,27 @@ license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc
   href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons\
    Attribution-NonCommercial 3.0 Unported License</a>.
    """
+description      = 'ReadIM - Read and write native DaVis images and vectors filetypes VC7 and IM7'
+long_description = ''.join(open('README').readlines())
 
-sys.path.insert(1, os.path.abspath('ReadIM')) # to give access to core.py
 
-setup (name = 'ReadIM_bin',
-       version = version,
-       author      = "Alan Fleming + LaVision",
-       description = "Python wrapper for reading and writing LaVision IMX files. Thanks to LaVision for providing original code.",
-       ext_modules = [ReadIMX_module],
-       py_modules = ['configobj'],
-       packages = ['ReadIM'],
+setup (name = 'ReadIM',
+       version      = version,
+       author       = "Alan Fleming + LaVision",
+       author_email =  'alanf@amc.edu.au',
+       url          = 'https://bitbucket.org/fleming79/readim',
+       license      = 'Creative Commons Attribution-NonCommercial 3.0 Unported License',
+       platform     = 'win',
+       description  = description,
+       long_description = long_description,
+       ext_modules  = [ReadIMX_module],
+       py_modules   = ['configobj', 'ReadIM'],
+       packages     = ['ReadIM'],
        package_data = {'ReadIM':['*.dll','sample/*.*']},
        include_package_data = True,
-       install_requires=['setuptools'],
-       script_args = script_args,
-       license = license
+       install_requires     =['setuptools'],
+       script_args          = script_args,
+
        )
 
 
