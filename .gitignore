@@ -16,3 +16,8 @@
 /distribute-0.6.28-py2.7.egg
 /distribute-0.6.28.tar.gz
 /dist
+
+/ReadIM/*.pyc
+
+/ReadIM.egg-info
+
