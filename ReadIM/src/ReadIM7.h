@@ -18,6 +18,7 @@
 
 #endif
 
+#define _ftelli64 ftell
 
 enum ImageExtraFlag_t	// bit flags !
 {	

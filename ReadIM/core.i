@@ -11,7 +11,7 @@
  /* Includes the header in the wrapper code */
  #include "ReadIMX.h"
  #include "ReadIM7.h"
- #include "python.h"
+ #include <Python.h>
  #include "swigExtras.h"
  %}
 
