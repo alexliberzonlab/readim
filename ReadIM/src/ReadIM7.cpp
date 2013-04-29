@@ -24,7 +24,7 @@
 uint64 FileGetPosition( FILE *p_pFile )
 {
 	uint64 nPos = 0;
-#	ifdef _LINUX
+#	ifdef __linux__
 	fpos_t pos;
 	fgetpos( p_pFile, &pos );
 	return pos.__pos;

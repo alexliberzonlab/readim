@@ -9,8 +9,8 @@
 
 	int ReadIMX ( const char* theFileName, BufferType* myBuffer, AttributeList** myList )
 
-	If you don't want to read the attributes, set myList = NULL. 
-	If myList is set, the parameter returns a pointer to the list. 
+	If you don't want to read the attributes, set myList = NULL.
+	If myList is set, the parameter returns a pointer to the list.
 	You have to free the strings manually or call DestroyAttributeList.
 
 	The function returns the error codes of ImReadError_t.
@@ -18,10 +18,10 @@
 
 #include "ReadIMX.h"
 
-#ifdef _LINUX
+#ifdef __linux__
 #	define max(v1,v2)	(v1 > v2 ? v1 : v2)
 #else // Windows
-#	define max(v1,v2)	(v1 > v2 ? v1 : v2) // you have to define in windows too!
+//#	define max(v1,v2)	(v1 > v2 ? v1 : v2) // you have to define in windows too!
 	// TL 21.04.09: strcpy_s warnings removed
 #	pragma warning (disable : 4996)
 #endif
@@ -69,11 +69,11 @@ typedef struct		// image file header (256 Bytes)
 
 	 Byte			version;			// 33:  e.g. 120 = 1.2	300+ = 3.xx  40-99 = 4.0 bis 9.9
 #ifdef _WIN32
-	 char       date[9];       // 34	
+	 char       date[9];       // 34
 	 char       time[9];			// 43
 #else
 //#message MIS-ALIGNED!!!
-	 char       date[8];       // 34	
+	 char       date[8];       // 34
 	 char       time[8];			// 43
 #endif
 	 short int  xinit;         // 52:  x-scale values
@@ -230,7 +230,7 @@ Byte* Buffer_GetRowAddrAndSize( BufferType* myBuffer, int theRow, unsigned long 
 /*****************************************************************************/
 
 
-typedef enum 
+typedef enum
 {
 	BIT8,			// compressed as 8 bit
 	BIT4L,		// compressed to 4 bit left nibble
@@ -425,7 +425,7 @@ int ReadIMX ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
       fclose(theFile);
       return IMREAD_ERR_HEADER;
    }
-   
+
 	int itsVersion	= header.version;
 	//itsDate		= header.date;
 	//itsTime		= header.time;
@@ -474,7 +474,7 @@ int ReadIMX ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
       fclose(theFile);
       return IMREAD_ERR_FORMAT;
    }
-      
+
    theNF = ((itsVersion>=VER_EXTHEADER && itsVersion<100) ? header.f_dim : 1);
    theNY = (header.rows==-1 ? header.longRows : header.rows);
 	theNX = (header.columns==-1 ? header.longColumns : header.columns);
@@ -504,7 +504,7 @@ int ReadIMX ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
 			fclose(theFile);
 			return err;
 		}
-	}			
+	}
 	else    // no compression
 	{
 		for (int row=0; row<myBuffer->totalLines; row++)
@@ -537,7 +537,7 @@ errexit:
 // Read and write attributes
 /*****************************************************************************/
 
-typedef enum 
+typedef enum
 {
    IEH_END = 0,
    IEH_SCALE_X,
@@ -673,10 +673,10 @@ int ReadImgAttributes( FILE* theFile, AttributeList** myList )
 
 
 void WriteAttribute_ITEM( FILE* theFile, AttributeType t, int l, const char* d )
-{   
+{
    AttributeObject item;
-   item.type = t;                            
-   item.size = l;                            
+   item.type = t;
+   item.size = l;
    fwrite((char*)&item,sizeof(item),1,theFile);
    fwrite((char*)d,item.size,1,theFile);
 	/*
@@ -687,7 +687,7 @@ void WriteAttribute_ITEM( FILE* theFile, AttributeType t, int l, const char* d )
 }
 
 void WriteAttribute_SCALE( FILE* theFile, AttributeType t, char* value )
-{   
+{
 	int len = (int)strlen(value);
 	Attribute_BreakToNull( value, len );
 	WriteAttribute_ITEM( theFile, t, len, value );
@@ -710,8 +710,8 @@ void WriteScalesAsAttributes( FILE* theFile, const BufferType& p_pBuffer )
 void WriteAttribute_END( FILE *theFile )
 {
    AttributeObject item;
-	item.type = IEH_END; 
-	item.size = 0; 
+	item.type = IEH_END;
+	item.size = 0;
 	fwrite( (char*)&item, sizeof(item), 1, theFile );
 }
 
@@ -719,7 +719,7 @@ void WriteAttribute_END( FILE *theFile )
 int WriteImgAttributes( FILE* theFile, bool /*isIM6*/, AttributeList* myList )
 {
 	AttributeList* itsAttribute = myList;
-   while (itsAttribute) 
+   while (itsAttribute)
 	{
 		if (strcmp(itsAttribute->name,"_SCALE_X")==0)
 		{
@@ -767,7 +767,7 @@ int WriteImgAttributes( FILE* theFile, bool /*isIM6*/, AttributeList* myList )
 			WriteAttribute_ITEM( theFile, IEH_ATTRIBUTE, (int)strlen(value), value );
 			free(value);
 		}
-		
+
 		itsAttribute = itsAttribute->next;
    }
 
@@ -803,7 +803,7 @@ inline void Compress16Bits( int n16bytes, signed char*& imx_bpageadr, long& imx_
 	adr[2] = adr[1];								/* shift first pixel 1 right */
 	adr[1] = adr[0];								/* shift first pixel 1 right */
 	adr[0] = (signed char)n16bytes;			/* number of uncompressed pixel */
-	adr += 3;										/* increment pointer */	
+	adr += 3;										/* increment pointer */
 
 	// TL 08.03.02: i=0 kopiert in sich selbst
 	adr += 2;
@@ -841,7 +841,7 @@ inline void Compress16Bits( int n16bytes, signed char*& imx_bpageadr, long& imx_
 		copycount--;
 	}
 	i = 4;
-	while (copycount>0) 
+	while (copycount>0)
 	{	// i=4,5,..
 		*adr = adr[i];
 		adr++;
@@ -864,7 +864,7 @@ bool StoreImxOld( BufferType* myBuffer, int rowFirst, int rowLast, int maxCol, F
 	int BUFFERSIZE	= (theNX/512) * 512 * 2 + 4096;	// n * sectorsize, size of packing memory, words
 	unsigned long BUFFERSAVE = 2 * theNX + 256;	// store memory when only this space is available (may not be enough for the next row)
    char* page;
-	
+
 	page = (char*)malloc(sizeof(char)*BUFFERSIZE);
 	if ( page == NULL )
 		return true;
@@ -883,7 +883,7 @@ bool StoreImxOld( BufferType* myBuffer, int rowFirst, int rowLast, int maxCol, F
 
 	lastvalueL = 0;
 	n16bytes   = 0;								/* uncompressed pixel */
-	
+
 	int row, col;
 	for ( row = rowFirst; row < rowLast; row++ )
 	{																		/* line in buffer */
@@ -957,12 +957,12 @@ bool StoreImxOld( BufferType* myBuffer, int rowFirst, int rowLast, int maxCol, F
 		if (imx_bytecount != fwrite( page, sizeof(char), imx_bytecount, theFile ))
 			goto exiterr;
 	}
-	
+
 	free(page);
 	return false;
 
 exiterr:
-	free(page); 
+	free(page);
 	return true;
 }
 
@@ -1002,7 +1002,7 @@ int WriteIMX( FILE *theFile, BufferType* myBuffer )
 	{
 		const Word* ptr = &myBuffer->wordArray[row*theNX];
 		for ( int col = 0; col < theNX; col += steps )
-			PreViewData[iData++] = (Byte)(ptr[col] >> shiftright); 
+			PreViewData[iData++] = (Byte)(ptr[col] >> shiftright);
 	}
 	fwrite( PreViewData, sizeof(Byte), iData, theFile );
 	free(PreViewData);

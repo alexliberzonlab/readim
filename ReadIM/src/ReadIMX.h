@@ -8,7 +8,7 @@
 #define __READIMX_H
 
 
-#ifdef _WIN32
+#if defined _WIN32 || defined _WIN64
 
 #include <windows.h>
 
@@ -24,7 +24,7 @@
 
 #endif
 
-#ifdef _LINUX
+#ifdef __linux__
 #	pragma message ("This is a Linux operating system")
 
 #	include <stdlib.h>
@@ -60,7 +60,7 @@ typedef struct
 	char	unit[16];
 } BufferScaleType;
 
-enum BufferFormat_t 
+enum BufferFormat_t
 {
 	BUFFER_FORMAT__NOTUSED		= -1,			// not used any longer
 	BUFFER_FORMAT_MEMPACKWORD	= -2,			// memory packed Word buffer (= byte buffer)
@@ -94,7 +94,7 @@ typedef struct
 	bool*			bMaskArray;			// mask array, NULL if no mask exists
 } BufferType;
 
-typedef struct AttributeList 
+typedef struct AttributeList
 {
    char*          name;
    char*          value;
