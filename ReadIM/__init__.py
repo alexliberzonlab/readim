@@ -1,3 +1,3 @@
-import core
-import extra
-from core import *
+from . import core
+from . import extra
+from .core import *

@@ -21,7 +21,7 @@
 #ifdef __linux__
 #	define max(v1,v2)	(v1 > v2 ? v1 : v2)
 #else // Windows
-//#	define max(v1,v2)	(v1 > v2 ? v1 : v2) // you have to define in windows too!
+#	define max(v1,v2)	(v1 > v2 ? v1 : v2) // you have to define in windows too!
 	// TL 21.04.09: strcpy_s warnings removed
 #	pragma warning (disable : 4996)
 #endif

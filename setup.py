@@ -4,13 +4,9 @@
 setup.py file for SWIG example
 """
 
-version = '0.5.0'
+version = '0.5.1'
 
 #include "Python.h"
-from distribute_setup import use_setuptools
-use_setuptools()
-
-##from distutils.core import setup, Extension
 
 from setuptools import setup, find_packages, Extension
 
@@ -19,9 +15,9 @@ import glob
 
 
 try:
-    p= subprocess.check_call(['swig', '-python', '-c++' ,'-IReadIM/src','ReadIM/core.i'])
+    p= subprocess.check_call(['swig', '-python', '-py3', '-c++' ,'-IReadIM/src','ReadIM/core.i'])
 except:
-    print 'unable to run swig! is it installed?. Will try to perform action anyway...'
+    print ('unable to run swig! is it installed?. Will try to perform action anyway...')
 
 scs = ['ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
         'zlib/adler32.c','zlib/deflate.c','zlib/infcodes.c',
@@ -59,19 +55,19 @@ license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc
   href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons\
    Attribution-NonCommercial 3.0 Unported License</a>.
    """
-description      = 'ReadIM - Read and write native DaVis images and vectors filetypes VC7 and IM7'
+description      = 'Read and write native DaVis images and vectors filetypes VC7 and IM7'
 long_description = ''.join(open('README').readlines())
 
 
 setup (name = 'ReadIM',
+        description = description,
        version      = version,
        author       = "Alan Fleming + LaVision",
        author_email =  'alanf@amc.edu.au',
        url          = 'https://bitbucket.org/fleming79/readim',
        license      = 'Creative Commons Attribution-NonCommercial 3.0 Unported License',
        platform     = 'win',
-       description  = description,
-       long_description = long_description,
+       use2to3      = True,
        ext_modules  = [ReadIMX_module],
        py_modules   = ['configobj'],
        packages     = ['ReadIM'],

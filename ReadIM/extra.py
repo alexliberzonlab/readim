@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 __metaclass__ = type
 
-import core
+from . import core
 import os
 import ctypes
 import numpy as np
@@ -23,7 +23,7 @@ class BunchMappable():
         super(BunchMappable, self).__setattr__('_mappable', mappable)
 
         if hasattr(mappable, 'items'):
-            for key,val in mappable.items():
+            for key,val in list(mappable.items()):
                 if key.find('_') == 0:
                     continue #Skip intended hidden files
                 if hasattr(val, 'items'):
@@ -40,7 +40,7 @@ class BunchMappable():
 
     def __str__(self):
         rep = ''
-        for key, val in self.__dict__.items():
+        for key, val in list(self.__dict__.items()):
             rep = rep + key + '\n'
         return '\n'.join(self.__dict__)
 
@@ -66,7 +66,7 @@ class BunchMappable():
 
             description = getattr(parent, 'filename', None) or repr(parent)
             keys.pop(-1)
-            raise KeyError, '"{0}" is missing from:"{1}" (depth={2})'.format('->'.join(reversed(keys)), description, depth)
+            raise KeyError('"{0}" is missing from:"{1}" (depth={2})'.format('->'.join(reversed(keys)), description, depth))
 
 
     def __iter__(self):
@@ -77,7 +77,7 @@ class BunchMappable():
         if name in ['_immutable', '_key', '_parent']:
             super(BunchMappable, self).__setattr__(name,value)
         elif self._immutable:
-            raise AttributeError, 'This Object is immutable'
+            raise AttributeError('This Object is immutable')
         else:
 
             if name in self._mappable:
@@ -141,7 +141,7 @@ class BufferTypeAlt(BunchMappable):
             obj2dict(buff, mappings) # tidy up
 
         else:
-            raise TypeError, 'Type of buffer not recognised!\n%s' % repr(buff)
+            raise TypeError('Type of buffer not recognised!\n%s' % repr(buff))
 
         super(BufferTypeAlt, self).__init__(mappings, immutable=immutable, str2num=str2num)
 
@@ -153,7 +153,7 @@ def obj2dict(obj, d):
     """ return a nested dictionary of all non hidden attributes
         of the obj as a nested dictionary of the same structure
     """
-    for key, val in obj.__dict__.items():
+    for key, val in list(obj.__dict__.items()):
         if hasattr(val, '__dict__'):
             d[key] = {}
             obj2dict(val,d[key])
@@ -205,7 +205,7 @@ def get_Buffer_andAttributeList(filename, buff=None,atts=None):
         core.DestroyBuffer(buff)
         core.DestroyAttributeList2(atttributes.next)
     """
-    if not os.path.isfile(filename): raise IOError, 'file not found %s' %filename
+    if not os.path.isfile(filename): raise IOError('file not found %s' %filename)
 
     if buff is None: buff = core.BufferType()
     if atts is None: atts = core.AttributeList()
@@ -216,12 +216,12 @@ def get_Buffer_andAttributeList(filename, buff=None,atts=None):
         core.DestroyBuffer(buffer)
 
     if True:
-        if err == core.IMREAD_ERR_FILEOPEN: raise IOError, 'File not found'
-        elif err == core.IMREAD_ERR_HEADER: raise IOError,'Error in header'
-        elif err == core.IMREAD_ERR_FORMAT: raise IOError, 'Error in format'
-        elif err == core.IMREAD_ERR_DATA:   raise IOError, 'Error while reading data'
-        elif err == core.IMREAD_ERR_MEMORY: raise IOError, 'Error out of memory'
-        elif err > 0: raise IOError, 'Unkown Error code: %s' % err
+        if err == core.IMREAD_ERR_FILEOPEN: raise IOError('File not found')
+        elif err == core.IMREAD_ERR_HEADER: raise IOError('Error in header')
+        elif err == core.IMREAD_ERR_FORMAT: raise IOError('Error in format')
+        elif err == core.IMREAD_ERR_DATA:   raise IOError('Error while reading data')
+        elif err == core.IMREAD_ERR_MEMORY: raise IOError('Error out of memory')
+        elif err > 0: raise IOError('Unkown Error code: %s' % err)
 
     return buff, atts
 
@@ -283,7 +283,7 @@ def load_AttributeList(atts={}):
 
     for key in atts:
         a.next  = core.AttributeList()
-        a       = a.next
+        a       = a.__next__
         a.name  = key
         a.value = str(atts[key])
 
@@ -312,7 +312,7 @@ def buffer_as_array(buff):
     elif buff.floatArray:
         pA = ctypes.cast( buff.floatArray.__long__(), ctypes.POINTER( ctypes.c_float) )
     else:
-        raise MemoryError, 'No buffer available'
+        raise MemoryError('No buffer available')
 
     if buff.image_sub_type > 0:
         components = core.GetVectorComponents(buff.image_sub_type)
@@ -351,11 +351,11 @@ def att2dict(att, destroy=True):
     """ Convert an Attribute list to a dictionary
     """
     out = {}
-    attn = att.next
+    attn = att.__next__
     while attn:
         out[attn.name] = attn.value
-        attn = attn.next
-    if att.next and destroy:
-        core.DestroyAttributeList2(att.next)
+        attn = attn.__next__
+    if att.__next__ and destroy:
+        core.DestroyAttributeList2(att.__next__)
     return out
 
