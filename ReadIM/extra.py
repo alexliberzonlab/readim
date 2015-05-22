@@ -283,7 +283,7 @@ def load_AttributeList(atts={}):
 
     for key in atts:
         a.next  = core.AttributeList()
-        a       = a.__next__
+        a       = a.next
         a.name  = key
         a.value = str(atts[key])
 
@@ -351,11 +351,11 @@ def att2dict(att, destroy=True):
     """ Convert an Attribute list to a dictionary
     """
     out = {}
-    attn = att.__next__
+    attn = att.next
     while attn:
         out[attn.name] = attn.value
-        attn = attn.__next__
-    if att.__next__ and destroy:
-        core.DestroyAttributeList2(att.__next__)
+        attn = attn.next
+    if att.next and destroy:
+        core.DestroyAttributeList2(att.next)
     return out
 

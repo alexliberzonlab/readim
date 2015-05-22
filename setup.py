@@ -30,7 +30,6 @@ scs = ['ReadIM/core_wrap.cxx'] + scs
 for s in scs:
     assert os.path.isfile(s)
 
-extra_link_args     = []#['-IReadIM/src', '-IReadIM/src/zlib']
 extra_compile_args  =['-IReadIM/src']
 
 ReadIMX_module = Extension('ReadIM._core',
@@ -67,13 +66,10 @@ setup (name = 'ReadIM',
        url          = 'https://bitbucket.org/fleming79/readim',
        license      = 'Creative Commons Attribution-NonCommercial 3.0 Unported License',
        platform     = 'win',
-       use2to3      = True,
        ext_modules  = [ReadIMX_module],
-       py_modules   = ['configobj'],
        packages     = ['ReadIM'],
        package_data = {'ReadIM':['*.dll','sample/*.*']},
        include_package_data = True,
-       install_requires     =['setuptools'],
        script_args          = script_args,
 
        )
