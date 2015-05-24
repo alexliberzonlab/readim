@@ -19,23 +19,25 @@
 #include "ReadIM7.h"
 #include "zlib/zlib.h"
 
+#ifndef min
+#	define min(a,b)	((a)<(b) ? (a) : (b))
+#endif
+#ifndef max
+#	define max(a,b)	((a)>(b) ? (a) : (b))
+#endif
+
 #pragma warning(disable:4996) // Disable warning about safety of sscanf, strncpy and fopen
 
 uint64 FileGetPosition( FILE *p_pFile )
 {
 	uint64 nPos = 0;
-#	ifdef __linux__
+#	ifdef _LINUX
 	fpos_t pos;
 	fgetpos( p_pFile, &pos );
 	return pos.__pos;
 #	else
-
-#    ifdef __MINGW32__
-    nPos = ftello64( p_pFile );
-#   else
 	nPos = _ftelli64( p_pFile );
 #	endif
-#   endif
 	return nPos;
 }
 
@@ -43,7 +45,7 @@ uint64 FileGetPosition( FILE *p_pFile )
 enum IM7PackType_t
 {
 	IM7_PACKTYPE__UNCOMPR= 0x1000,// autoselect uncompressed
-	IM7_PACKTYPE__FAST,				// autoselect fastest packtype,
+	IM7_PACKTYPE__FAST,				// autoselect fastest packtype, 
 	IM7_PACKTYPE__SIZE,				// autoselect packtype with smallest resulting file
 	IM7_PACKTYPE_IMG			= 0,	// uncompressed, like IMG
 	IM7_PACKTYPE_IMX,					// old version compression, like IMX
@@ -95,7 +97,7 @@ ImReadError_t SCPackZlib_Read( FILE* theFile, BufferType* myBuffer )
 		return IMREAD_ERR_MEMORY;
 	}
 	fread( source, 1, sourceLen, theFile );
-
+	
 	uLongf destLen = 0;
 	Bytef *dest = Buffer_GetRowAddrAndSize(myBuffer,0,destLen);
 	destLen *= myBuffer->totalLines;
@@ -407,6 +409,8 @@ int ReadIM7 ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
 			}
 			ptr = ptr->next;
 		}
+		if (tmpAttrList)
+			delete tmpAttrList;
    }
 
 	if (errret==IMREAD_ERR_NO)
@@ -435,6 +439,7 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	   return IMREAD_ERR_FILEOPEN;
 
 	Image_Header_7 header;
+	memset( &header, 0, sizeof(header) );
 	header.version				= 0;
 	header.isSparse			= 0;
 	header.sizeX				= theNX;
@@ -493,8 +498,7 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	{	// just END attribute
 		WriteAttribute_END( theFile );
 	}
-
+	
 	fclose(theFile);
 	return 0;
 }
-

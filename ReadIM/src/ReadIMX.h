@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 //
-// Copyright (C) 2001-2012 LaVision GmbH.  All Rights Reserved.
+// Copyright (C) 2001-2013 LaVision GmbH.  All Rights Reserved.
 //
 //--------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@
 
 #endif
 
-#ifdef __linux__
+#ifdef _LINUX
 #	pragma message ("This is a Linux operating system")
 
 #	include <stdlib.h>
@@ -46,6 +46,8 @@ typedef enum
 	IMREAD_ERR_FORMAT,	// file format not read by this DLL
 	IMREAD_ERR_DATA,		// data reading error
 	IMREAD_ERR_MEMORY,	// out of memory
+	IMREAD_ERR_ATTRIBUTE_INVALID_TYPE,	// invalid attribute type
+	IMREAD_ERR_ATTRIBUTE_NO_DATA,			// missing attribute data
 } ImReadError_t;
 
 
@@ -60,7 +62,7 @@ typedef struct
 	char	unit[16];
 } BufferScaleType;
 
-enum BufferFormat_t
+enum BufferFormat_t 
 {
 	BUFFER_FORMAT__NOTUSED		= -1,			// not used any longer
 	BUFFER_FORMAT_MEMPACKWORD	= -2,			// memory packed Word buffer (= byte buffer)
@@ -79,6 +81,7 @@ enum BufferFormat_t
 	BUFFER_FORMAT_RGB_32			= -11	 		// each pixel has 32bit RGB color info
 };
 
+/// @brief Buffer structure of ReadIMX library.
 typedef struct
 {
    int         isFloat;
@@ -94,6 +97,7 @@ typedef struct
 	bool*			bMaskArray;			// mask array, NULL if no mask exists
 } BufferType;
 
+/// @brief Attribute list structure of ReadIMX library.
 typedef struct AttributeList
 {
    char*          name;

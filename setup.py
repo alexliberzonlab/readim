@@ -4,7 +4,7 @@
 setup.py file for SWIG example
 """
 
-version = '0.5.1'
+version = '0.6.0'
 
 #include "Python.h"
 

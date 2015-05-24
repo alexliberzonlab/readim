@@ -3811,6 +3811,28 @@ SWIGINTERN PyObject *IMREAD_ERR_MEMORY_swigconstant(PyObject *SWIGUNUSEDPARM(sel
 }
 
 
+SWIGINTERN PyObject *IMREAD_ERR_ATTRIBUTE_INVALID_TYPE_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *module;
+  PyObject *d;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
+  d = PyModule_GetDict(module);
+  if (!d) return NULL;
+  SWIG_Python_SetConstant(d, "IMREAD_ERR_ATTRIBUTE_INVALID_TYPE",SWIG_From_int(static_cast< int >(IMREAD_ERR_ATTRIBUTE_INVALID_TYPE)));
+  return SWIG_Py_Void();
+}
+
+
+SWIGINTERN PyObject *IMREAD_ERR_ATTRIBUTE_NO_DATA_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *module;
+  PyObject *d;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
+  d = PyModule_GetDict(module);
+  if (!d) return NULL;
+  SWIG_Python_SetConstant(d, "IMREAD_ERR_ATTRIBUTE_NO_DATA",SWIG_From_int(static_cast< int >(IMREAD_ERR_ATTRIBUTE_NO_DATA)));
+  return SWIG_Py_Void();
+}
+
+
 SWIGINTERN PyObject *_wrap_BufferScaleType_factor_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   BufferScaleType *arg1 = (BufferScaleType *) 0 ;
@@ -7952,6 +7974,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"IMREAD_ERR_FORMAT_swigconstant", IMREAD_ERR_FORMAT_swigconstant, METH_VARARGS, NULL},
 	 { (char *)"IMREAD_ERR_DATA_swigconstant", IMREAD_ERR_DATA_swigconstant, METH_VARARGS, NULL},
 	 { (char *)"IMREAD_ERR_MEMORY_swigconstant", IMREAD_ERR_MEMORY_swigconstant, METH_VARARGS, NULL},
+	 { (char *)"IMREAD_ERR_ATTRIBUTE_INVALID_TYPE_swigconstant", IMREAD_ERR_ATTRIBUTE_INVALID_TYPE_swigconstant, METH_VARARGS, NULL},
+	 { (char *)"IMREAD_ERR_ATTRIBUTE_NO_DATA_swigconstant", IMREAD_ERR_ATTRIBUTE_NO_DATA_swigconstant, METH_VARARGS, NULL},
 	 { (char *)"BufferScaleType_factor_set", _wrap_BufferScaleType_factor_set, METH_VARARGS, NULL},
 	 { (char *)"BufferScaleType_factor_get", _wrap_BufferScaleType_factor_get, METH_VARARGS, NULL},
 	 { (char *)"BufferScaleType_offset_set", _wrap_BufferScaleType_offset_set, METH_VARARGS, NULL},
