@@ -15,7 +15,10 @@ import glob
 
 
 try:
-    p= subprocess.check_call(['swig', '-python', '-py3', '-c++' ,'-IReadIM/src','ReadIM/core.i'])
+    args = ['swig', '-python','-c++' ,'-IReadIM/src','ReadIM/core.i']
+    if sys.version_info == 3:
+        args.append('-py3')
+    p= subprocess.check_call(args)
 except:
     print ('unable to run swig! is it installed?. Will try to perform action anyway...')
 

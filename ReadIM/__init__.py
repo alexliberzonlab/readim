@@ -13,8 +13,10 @@ for s in dir(core):
     if s.find('IMREAD_ERR') == 0:
         ERROR_CODES[getattr(core,s)] = s
 
-
+del(s)
 from .core import   (BufferType, BufferScaleType, AttributeList,
                     CreateBuffer, DestroyBuffer, DestroyAttributeList,
                     ReadIM7, WriteIM7, GetVectorComponents, SetBufferScale,
                     SetAttribute)
+
+from .extra import *
