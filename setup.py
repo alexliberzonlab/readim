@@ -8,7 +8,8 @@ version = '0.6.0'
 
 #include "Python.h"
 
-from setuptools import setup, find_packages, Extension
+##from setuptools import setup, Extension
+from distutils.core import setup, Extension
 
 import subprocess, sys, os
 import glob
