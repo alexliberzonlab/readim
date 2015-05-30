@@ -16,7 +16,7 @@ import glob
 
 try:
     args = ['swig', '-python','-c++' ,'-IReadIM/src','ReadIM/core.i']
-    if sys.version_info == 3:
+    if sys.version_info >= (3,0):
         args.append('-py3')
     p= subprocess.check_call(args)
 except:

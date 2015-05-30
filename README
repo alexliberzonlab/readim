@@ -37,9 +37,9 @@ Writing files
 
 Finally, memory cleanup is not automatic. To prevent manual garbarge collection do the following:
 
-del(vbuff)
-ReadIM.DestroyBuffer(buff)
-ReadIM.DestroyAttributeListSafe(atts)
+>>> del(vbuff)
+>>> ReadIM.DestroyBuffer(buff)
+>>> ReadIM.DestroyAttributeListSafe(atts)
 
 
 For higher level access to DaVis files the IM package is available at:

@@ -1,3 +1,17 @@
+"""
+ReadIM: A fast DaVis8 file reader and writer for Python
+=======================================================
+
+Documentation is available in the docstrings.
+
+Contents
+--------
+ReadIM is a wrapper for for C-code provided by LaVision as the core
+functionality. Additional functions are provided to load array data into memory
+with access to data as numpy arrays and attributes as dictionaires.
+"""
+from __future__ import division, print_function, absolute_import
+
 from . import core
 from . import extra
 
