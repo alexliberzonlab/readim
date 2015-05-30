@@ -8,8 +8,7 @@ version = '0.6.0'
 
 #include "Python.h"
 
-##from setuptools import setup, Extension
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 import subprocess, sys, os
 import glob
@@ -44,11 +43,11 @@ ReadIMX_module = Extension('ReadIM._core',
                             extra_compile_args = extra_compile_args,
                             )
 
-if len(sys.argv) < 2:
-    script_args = ['bdist_wininst']
-
-else:
-    script_args = sys.argv[1:]
+##if len(sys.argv) < 2:
+##    script_args = ['bdist_wininst']
+##
+##else:
+script_args = sys.argv[1:]
 
 
 license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">\
