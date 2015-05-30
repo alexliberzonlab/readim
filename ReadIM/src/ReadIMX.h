@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 //
-// Copyright (C) 2001-2012 LaVision GmbH.  All Rights Reserved.
+// Copyright (C) 2001-2013 LaVision GmbH.  All Rights Reserved.
 //
 //--------------------------------------------------------------------------------------------------
 
@@ -8,7 +8,7 @@
 #define __READIMX_H
 
 
-#ifdef _WIN32
+#if defined _WIN32 || defined _WIN64
 
 #include <windows.h>
 
@@ -48,6 +48,8 @@ typedef enum
 	IMREAD_ERR_FORMAT,	// file format not read by this DLL
 	IMREAD_ERR_DATA,		// data reading error
 	IMREAD_ERR_MEMORY,	// out of memory
+	IMREAD_ERR_ATTRIBUTE_INVALID_TYPE,	// invalid attribute type
+	IMREAD_ERR_ATTRIBUTE_NO_DATA,			// missing attribute data
 } ImReadError_t;
 
 
@@ -81,6 +83,7 @@ enum BufferFormat_t
 	BUFFER_FORMAT_RGB_32			= -11	 		// each pixel has 32bit RGB color info
 };
 
+/// @brief Buffer structure of ReadIMX library.
 typedef struct
 {
    int         isFloat;
@@ -96,7 +99,8 @@ typedef struct
 	bool*			bMaskArray;			// mask array, NULL if no mask exists
 } BufferType;
 
-typedef struct AttributeList 
+/// @brief Attribute list structure of ReadIMX library.
+typedef struct AttributeList
 {
    char*          name;
    char*          value;

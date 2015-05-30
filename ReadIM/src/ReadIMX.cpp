@@ -545,14 +545,20 @@ typedef enum
    IEH_SCALE_Z,
    IEH_SCALE_I,
    IEH_COMMENT,
-   IEH_ATTRIBUTE,
+   IEH_ATTRIBUTE,					// data: attrname=attrvalue
    IEH_SCALE_F,
-   IEH_ATTRIBUTE_FLOATARRAY,
+   IEH_ATTRIBUTE_FLOATARRAY,	// data: attrname<align4>floatarray
    IEH_ATTRIBUTE_INTARRAY,
    IEH_ATTRIBUTE_WORDARRAY,
-	IEH_TIME,						// long time with milliseconds, TL 24.10.00
-	// jetzt duerfen neue Attribute folgen, die bisherigen Daten versteht auch DaVis 6
+	IEH_TIME,						// long time with milliseconds
+	// all attributes above can be read with DaVis 6, now starting with DaVis 7
 	IEH_DATE,
+	// since DaVis 8.0.7
+	IEH_ATTRIBUTE_DOUBLEARRAY,
+	IEH_ATTRIBUTE_FLOATPLANE,	// data: attrname<align4><sizeXuint32><sizeYuint32>floatarray
+	IEH_ATTRIBUTE_INTPLANE,
+	IEH_ATTRIBUTE_WORDPLANE,
+	IEH_ATTRIBUTE_DOUBLEPLANE,
 	// max index of this list
 	IEH_MAX
 } AttributeType;
@@ -609,6 +615,10 @@ int ReadImgAttributes( FILE* theFile, AttributeList** myList )
    while (fread((char*)&item,1,sizeof(item),theFile))
 	{
       char* data = NULL;
+		if ( (item.type < IEH_END) || (item.type >= IEH_MAX) )
+		{
+			return IMREAD_ERR_ATTRIBUTE_INVALID_TYPE;
+		}
       if (item.size>0)
 		{
          data = (char*)malloc(item.size+1);
@@ -616,7 +626,7 @@ int ReadImgAttributes( FILE* theFile, AttributeList** myList )
          if (!fread(data,1,item.size,theFile))
 			{
 				free(data);
-            return -1;  // "extended header: no tag data"
+            return IMREAD_ERR_ATTRIBUTE_NO_DATA;
 			}
       }
 		if (data)
@@ -666,6 +676,10 @@ int ReadImgAttributes( FILE* theFile, AttributeList** myList )
 				;	// avoid warning
          }
 			free(data);
+		}
+		if (item.type == IEH_END)
+		{	// stop reading attributes
+			return 0;
 		}
    }
    return 0;
@@ -943,7 +957,7 @@ bool StoreImxOld( BufferType* myBuffer, int rowFirst, int rowLast, int maxCol, F
 
 		if ( imx_bytecount > (long)(BUFFERSIZE-BUFFERSAVE) )				/* store line in file */
 		{
-			if (imx_bytecount != fwrite( page, sizeof(char), imx_bytecount, theFile ))
+			if (imx_bytecount != (long) fwrite( page, sizeof(char), imx_bytecount, theFile ))
 				goto exiterr;
 			imx_bytecount = 0;											/* reset counter */
 			imx_bpageadr = (signed char*) page;						/* reset byte pointer */
@@ -954,7 +968,7 @@ bool StoreImxOld( BufferType* myBuffer, int rowFirst, int rowLast, int maxCol, F
 
 	if ( imx_bytecount > 0 )                          /* store rest */
 	{
-		if (imx_bytecount != fwrite( page, sizeof(char), imx_bytecount, theFile ))
+		if (imx_bytecount != (long) fwrite( page, sizeof(char), imx_bytecount, theFile ))
 			goto exiterr;
 	}
 	
@@ -969,10 +983,10 @@ exiterr:
 
 int WriteIMX( FILE *theFile, BufferType* myBuffer )
 {
-	int theNX = myBuffer->nx,
-	    theNY = myBuffer->ny,
-		 theNZ = myBuffer->nz,
-		 theNF = myBuffer->nf;
+	int theNX = myBuffer->nx;
+	int theNY = myBuffer->ny;
+	int theNZ = myBuffer->nz;
+	int theNF = myBuffer->nf;
 
 // preview:
 	int row;
@@ -1025,10 +1039,10 @@ int WriteIMGXAttr( const char* theFileName, bool isIMX, BufferType* myBuffer, At
 	if (theFile==NULL)
 		return IMREAD_ERR_FILEOPEN;
 
-	int theNX = myBuffer->nx,
-	    theNY = myBuffer->ny,
-		 theNZ = myBuffer->nz,
-		 theNF = myBuffer->nf;
+	int theNX = myBuffer->nx;
+	int theNY = myBuffer->ny;
+	int theNZ = myBuffer->nz;
+	int theNF = myBuffer->nf;
 
 	// create header
 	image_header header;
@@ -1089,5 +1103,3 @@ int WriteIMGXAttr( const char* theFileName, bool isIMX, BufferType* myBuffer, At
 	fclose(theFile);
 	return err;
 }
-
-

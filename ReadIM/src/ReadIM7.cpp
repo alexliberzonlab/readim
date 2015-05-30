@@ -14,10 +14,17 @@
 
    The function returns the error codes of ImReadError_t.
 */
-	 
+
 #include "ReadIMX.h"
 #include "ReadIM7.h"
 #include "zlib/zlib.h"
+
+#ifndef min
+#	define min(a,b)	((a)<(b) ? (a) : (b))
+#endif
+#ifndef max
+#	define max(a,b)	((a)>(b) ? (a) : (b))
+#endif
 
 #pragma warning(disable:4996) // Disable warning about safety of sscanf, strncpy and fopen
 
@@ -402,6 +409,8 @@ int ReadIM7 ( const char* theFileName, BufferType* myBuffer, AttributeList** myL
 			}
 			ptr = ptr->next;
 		}
+		if (tmpAttrList)
+			delete tmpAttrList;
    }
 
 	if (errret==IMREAD_ERR_NO)
@@ -430,6 +439,7 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	   return IMREAD_ERR_FILEOPEN;
 
 	Image_Header_7 header;
+	memset( &header, 0, sizeof(header) );
 	header.version				= 0;
 	header.isSparse			= 0;
 	header.sizeX				= theNX;
@@ -492,4 +502,3 @@ int WriteIM7 ( const char* theFileName, bool isPackedIMX, BufferType* myBuffer, 
 	fclose(theFile);
 	return 0;
 }
-
