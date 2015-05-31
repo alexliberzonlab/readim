@@ -10,4 +10,6 @@ install:
 - "python setup.py build install"
 
 # command to run tests
-script: nosetests
+script:
+- cd ./ReadIM/tests
+- nosetests
