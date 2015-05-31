@@ -12,9 +12,8 @@ with access to data as numpy arrays and attributes as dictionaires.
 """
 from __future__ import division, print_function, absolute_import
 
-from . import core
 from . import extra
-
+from . import core
 # collect buffer fommats together
 BUFFER_FORMATS = {}
 for s in dir(core):
