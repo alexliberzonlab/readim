@@ -11,5 +11,5 @@ install:
 
 # command to run tests
 script:
-- cd ./ReadIM/tests
-- nosetests
+- python setup.py test
+-
