@@ -316,71 +316,71 @@ IMAGE_SPARSE_FLOAT = _core.IMAGE_SPARSE_FLOAT
 _core.IMAGE_PACKED_WORD_swigconstant(_core)
 IMAGE_PACKED_WORD = _core.IMAGE_PACKED_WORD
 
-def Buffer_GetRowAddrAndSize(myBuffer: 'BufferType', theRow: 'int', theRowLength: 'unsigned long &') -> "Byte *":
+def Buffer_GetRowAddrAndSize(myBuffer, theRow, theRowLength):
     return _core.Buffer_GetRowAddrAndSize(myBuffer, theRow, theRowLength)
 Buffer_GetRowAddrAndSize = _core.Buffer_GetRowAddrAndSize
 
-def CreateBuffer(myBuffer: 'BufferType', theNX: 'int', theNY: 'int', theNZ: 'int', theNF: 'int', isFloat: 'int', vectorGrid: 'int', imageSubType: 'BufferFormat_t') -> "int":
+def CreateBuffer(myBuffer, theNX, theNY, theNZ, theNF, isFloat, vectorGrid, imageSubType):
     return _core.CreateBuffer(myBuffer, theNX, theNY, theNZ, theNF, isFloat, vectorGrid, imageSubType)
 CreateBuffer = _core.CreateBuffer
 
-def SetBufferScale(theScale: 'BufferScaleType', theFactor: 'float', theOffset: 'float', theDesc: 'char const *', theUnit: 'char const *') -> "void":
+def SetBufferScale(theScale, theFactor, theOffset, theDesc, theUnit):
     return _core.SetBufferScale(theScale, theFactor, theOffset, theDesc, theUnit)
 SetBufferScale = _core.SetBufferScale
 
-def GetVectorComponents(imageSubType: 'BufferFormat_t') -> "int":
+def GetVectorComponents(imageSubType):
     return _core.GetVectorComponents(imageSubType)
 GetVectorComponents = _core.GetVectorComponents
 
-def DestroyBuffer(myBuffer: 'BufferType') -> "void":
+def DestroyBuffer(myBuffer):
     return _core.DestroyBuffer(myBuffer)
 DestroyBuffer = _core.DestroyBuffer
 
-def DestroyAttributeList(myList: 'AttributeList **') -> "void":
+def DestroyAttributeList(myList):
     return _core.DestroyAttributeList(myList)
 DestroyAttributeList = _core.DestroyAttributeList
 
-def SetAttribute(myList: 'AttributeList **', theName: 'char const *', theValue: 'char const *') -> "int":
+def SetAttribute(myList, theName, theValue):
     return _core.SetAttribute(myList, theName, theValue)
 SetAttribute = _core.SetAttribute
 
-def WriteScalesAsAttributes(theFile: 'FILE *', p_pBuffer: 'BufferType') -> "void":
+def WriteScalesAsAttributes(theFile, p_pBuffer):
     return _core.WriteScalesAsAttributes(theFile, p_pBuffer)
 WriteScalesAsAttributes = _core.WriteScalesAsAttributes
 
-def WriteAttribute_END(theFile: 'FILE *') -> "void":
+def WriteAttribute_END(theFile):
     return _core.WriteAttribute_END(theFile)
 WriteAttribute_END = _core.WriteAttribute_END
 
-def ReadImgAttributes(theFile: 'FILE *', myList: 'AttributeList **') -> "int":
+def ReadImgAttributes(theFile, myList):
     return _core.ReadImgAttributes(theFile, myList)
 ReadImgAttributes = _core.ReadImgAttributes
 
-def WriteImgAttributes(theFile: 'FILE *', isIM6: 'bool', myList: 'AttributeList') -> "int":
+def WriteImgAttributes(theFile, isIM6, myList):
     return _core.WriteImgAttributes(theFile, isIM6, myList)
 WriteImgAttributes = _core.WriteImgAttributes
 
-def SCPackOldIMX_Read(theFile: 'FILE *', myBuffer: 'BufferType') -> "ImReadError_t":
+def SCPackOldIMX_Read(theFile, myBuffer):
     return _core.SCPackOldIMX_Read(theFile, myBuffer)
 SCPackOldIMX_Read = _core.SCPackOldIMX_Read
 
-def WriteIMX(theFile: 'FILE *', myBuffer: 'BufferType') -> "int":
+def WriteIMX(theFile, myBuffer):
     return _core.WriteIMX(theFile, myBuffer)
 WriteIMX = _core.WriteIMX
 
-def ReadIMX(theFileName: 'char const *', myBuffer: 'BufferType', myList: 'AttributeList **') -> "int":
+def ReadIMX(theFileName, myBuffer, myList):
     return _core.ReadIMX(theFileName, myBuffer, myList)
 ReadIMX = _core.ReadIMX
 
-def WriteIMG(theFileName: 'char const *', myBuffer: 'BufferType') -> "int":
+def WriteIMG(theFileName, myBuffer):
     return _core.WriteIMG(theFileName, myBuffer)
 WriteIMG = _core.WriteIMG
 
-def WriteIMGX(theFileName: 'char const *', isIMX: 'bool', myBuffer: 'BufferType') -> "int":
+def WriteIMGX(theFileName, isIMX, myBuffer):
     return _core.WriteIMGX(theFileName, isIMX, myBuffer)
 WriteIMGX = _core.WriteIMGX
 
-def WriteIMGXAttr(theFileName: 'char const *', isIMX: 'bool', myBuffer: 'BufferType', myList: 'AttributeList') -> "int":
+def WriteIMGXAttr(theFileName, isIMX, myBuffer, myList):
     return _core.WriteIMGXAttr(theFileName, isIMX, myBuffer, myList)
 WriteIMGXAttr = _core.WriteIMGXAttr
 
@@ -481,63 +481,63 @@ Image_Tail_7_swigregister = _core.Image_Tail_7_swigregister
 Image_Tail_7_swigregister(Image_Tail_7)
 
 
-def ReadIM7(theFileName: 'char const *', myBuffer: 'BufferType', myList: 'AttributeList **') -> "int":
+def ReadIM7(theFileName, myBuffer, myList):
     return _core.ReadIM7(theFileName, myBuffer, myList)
 ReadIM7 = _core.ReadIM7
 
-def WriteIM7(theFileName: 'char const *', isPackedIMX: 'bool', myBuffer: 'BufferType', myList: 'AttributeList') -> "int":
+def WriteIM7(theFileName, isPackedIMX, myBuffer, myList):
     return _core.WriteIM7(theFileName, isPackedIMX, myBuffer, myList)
 WriteIM7 = _core.WriteIM7
 
-def ReadSpec(theFileName: 'char const *', myBuffer: 'BufferType', allAtts: 'char *') -> "int":
+def ReadSpec(theFileName, myBuffer, allAtts):
     return _core.ReadSpec(theFileName, myBuffer, allAtts)
 ReadSpec = _core.ReadSpec
 
-def ReadSpec2(theFileName: 'char const *', myBuffer: 'BufferType', myListin: 'AttributeList') -> "int":
+def ReadSpec2(theFileName, myBuffer, myListin):
     return _core.ReadSpec2(theFileName, myBuffer, myListin)
 ReadSpec2 = _core.ReadSpec2
 
-def DestroyAttributeList2(myListin: 'AttributeList') -> "void":
+def DestroyAttributeList2(myListin):
     return _core.DestroyAttributeList2(myListin)
 DestroyAttributeList2 = _core.DestroyAttributeList2
 
-def new_intp() -> "int *":
+def new_intp():
     return _core.new_intp()
 new_intp = _core.new_intp
 
-def copy_intp(value: 'int') -> "int *":
+def copy_intp(value):
     return _core.copy_intp(value)
 copy_intp = _core.copy_intp
 
-def delete_intp(obj: 'int *') -> "void":
+def delete_intp(obj):
     return _core.delete_intp(obj)
 delete_intp = _core.delete_intp
 
-def intp_assign(obj: 'int *', value: 'int') -> "void":
+def intp_assign(obj, value):
     return _core.intp_assign(obj, value)
 intp_assign = _core.intp_assign
 
-def intp_value(obj: 'int *') -> "int":
+def intp_value(obj):
     return _core.intp_value(obj)
 intp_value = _core.intp_value
 
-def new_floatp() -> "float *":
+def new_floatp():
     return _core.new_floatp()
 new_floatp = _core.new_floatp
 
-def copy_floatp(value: 'float') -> "float *":
+def copy_floatp(value):
     return _core.copy_floatp(value)
 copy_floatp = _core.copy_floatp
 
-def delete_floatp(obj: 'float *') -> "void":
+def delete_floatp(obj):
     return _core.delete_floatp(obj)
 delete_floatp = _core.delete_floatp
 
-def floatp_assign(obj: 'float *', value: 'float') -> "void":
+def floatp_assign(obj, value):
     return _core.floatp_assign(obj, value)
 floatp_assign = _core.floatp_assign
 
-def floatp_value(obj: 'float *') -> "float":
+def floatp_value(obj):
     return _core.floatp_value(obj)
 floatp_value = _core.floatp_value
 class dPtr(_object):
@@ -556,13 +556,13 @@ class dPtr(_object):
     __swig_destroy__ = _core.delete_dPtr
     __del__ = lambda self: None
 
-    def assign(self, value: 'double') -> "void":
+    def assign(self, value):
         return _core.dPtr_assign(self, value)
 
-    def value(self) -> "double":
+    def value(self):
         return _core.dPtr_value(self)
 
-    def cast(self) -> "double *":
+    def cast(self):
         return _core.dPtr_cast(self)
     __swig_getmethods__["frompointer"] = lambda x: _core.dPtr_frompointer
     if _newclass:
@@ -570,7 +570,7 @@ class dPtr(_object):
 dPtr_swigregister = _core.dPtr_swigregister
 dPtr_swigregister(dPtr)
 
-def dPtr_frompointer(t: 'double *') -> "dPtr *":
+def dPtr_frompointer(t):
     return _core.dPtr_frompointer(t)
 dPtr_frompointer = _core.dPtr_frompointer
 
@@ -590,13 +590,13 @@ class cPtr(_object):
     __swig_destroy__ = _core.delete_cPtr
     __del__ = lambda self: None
 
-    def assign(self, value: 'char') -> "void":
+    def assign(self, value):
         return _core.cPtr_assign(self, value)
 
-    def value(self) -> "char":
+    def value(self):
         return _core.cPtr_value(self)
 
-    def cast(self) -> "char *":
+    def cast(self):
         return _core.cPtr_cast(self)
     __swig_getmethods__["frompointer"] = lambda x: _core.cPtr_frompointer
     if _newclass:
@@ -604,7 +604,7 @@ class cPtr(_object):
 cPtr_swigregister = _core.cPtr_swigregister
 cPtr_swigregister(cPtr)
 
-def cPtr_frompointer(t: 'char *') -> "cPtr *":
+def cPtr_frompointer(t):
     return _core.cPtr_frompointer(t)
 cPtr_frompointer = _core.cPtr_frompointer
 
@@ -615,7 +615,7 @@ class useintArray(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, useintArray, name)
     __repr__ = _swig_repr
 
-    def __init__(self, nelements: 'size_t'):
+    def __init__(self, nelements):
         this = _core.new_useintArray(nelements)
         try:
             self.this.append(this)
@@ -624,13 +624,13 @@ class useintArray(_object):
     __swig_destroy__ = _core.delete_useintArray
     __del__ = lambda self: None
 
-    def __getitem__(self, index: 'size_t') -> "unsigned short":
+    def __getitem__(self, index):
         return _core.useintArray___getitem__(self, index)
 
-    def __setitem__(self, index: 'size_t', value: 'unsigned short') -> "void":
+    def __setitem__(self, index, value):
         return _core.useintArray___setitem__(self, index, value)
 
-    def cast(self) -> "unsigned short *":
+    def cast(self):
         return _core.useintArray_cast(self)
     __swig_getmethods__["frompointer"] = lambda x: _core.useintArray_frompointer
     if _newclass:
@@ -638,7 +638,7 @@ class useintArray(_object):
 useintArray_swigregister = _core.useintArray_swigregister
 useintArray_swigregister(useintArray)
 
-def useintArray_frompointer(t: 'unsigned short *') -> "useintArray *":
+def useintArray_frompointer(t):
     return _core.useintArray_frompointer(t)
 useintArray_frompointer = _core.useintArray_frompointer
 
@@ -649,7 +649,7 @@ class usefloatArray(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, usefloatArray, name)
     __repr__ = _swig_repr
 
-    def __init__(self, nelements: 'size_t'):
+    def __init__(self, nelements):
         this = _core.new_usefloatArray(nelements)
         try:
             self.this.append(this)
@@ -658,13 +658,13 @@ class usefloatArray(_object):
     __swig_destroy__ = _core.delete_usefloatArray
     __del__ = lambda self: None
 
-    def __getitem__(self, index: 'size_t') -> "float":
+    def __getitem__(self, index):
         return _core.usefloatArray___getitem__(self, index)
 
-    def __setitem__(self, index: 'size_t', value: 'float') -> "void":
+    def __setitem__(self, index, value):
         return _core.usefloatArray___setitem__(self, index, value)
 
-    def cast(self) -> "float *":
+    def cast(self):
         return _core.usefloatArray_cast(self)
     __swig_getmethods__["frompointer"] = lambda x: _core.usefloatArray_frompointer
     if _newclass:
@@ -672,7 +672,7 @@ class usefloatArray(_object):
 usefloatArray_swigregister = _core.usefloatArray_swigregister
 usefloatArray_swigregister(usefloatArray)
 
-def usefloatArray_frompointer(t: 'float *') -> "usefloatArray *":
+def usefloatArray_frompointer(t):
     return _core.usefloatArray_frompointer(t)
 usefloatArray_frompointer = _core.usefloatArray_frompointer
 
@@ -683,7 +683,7 @@ class usedoubleArray(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, usedoubleArray, name)
     __repr__ = _swig_repr
 
-    def __init__(self, nelements: 'size_t'):
+    def __init__(self, nelements):
         this = _core.new_usedoubleArray(nelements)
         try:
             self.this.append(this)
@@ -692,13 +692,13 @@ class usedoubleArray(_object):
     __swig_destroy__ = _core.delete_usedoubleArray
     __del__ = lambda self: None
 
-    def __getitem__(self, index: 'size_t') -> "double":
+    def __getitem__(self, index):
         return _core.usedoubleArray___getitem__(self, index)
 
-    def __setitem__(self, index: 'size_t', value: 'double') -> "void":
+    def __setitem__(self, index, value):
         return _core.usedoubleArray___setitem__(self, index, value)
 
-    def cast(self) -> "double *":
+    def cast(self):
         return _core.usedoubleArray_cast(self)
     __swig_getmethods__["frompointer"] = lambda x: _core.usedoubleArray_frompointer
     if _newclass:
@@ -706,7 +706,7 @@ class usedoubleArray(_object):
 usedoubleArray_swigregister = _core.usedoubleArray_swigregister
 usedoubleArray_swigregister(usedoubleArray)
 
-def usedoubleArray_frompointer(t: 'double *') -> "usedoubleArray *":
+def usedoubleArray_frompointer(t):
     return _core.usedoubleArray_frompointer(t)
 usedoubleArray_frompointer = _core.usedoubleArray_frompointer
 

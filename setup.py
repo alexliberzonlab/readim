@@ -31,7 +31,7 @@ if script_args[0] == 'test':
 
 else:
     try:
-        args = ['swig', '-python','-c++' , '-py3' ,'-IReadIM/src','ReadIM/core.i']
+        args = ['swig', '-python','-c++' ,'-IReadIM/src','ReadIM/core.i']
         p= subprocess.check_call(args)
     except:
         print ('unable to run swig! is it installed?. Will try to perform action anyway...')
