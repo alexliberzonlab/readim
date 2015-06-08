@@ -8,6 +8,9 @@ from . import core
 import os
 import ctypes
 import numpy as np
+import inspect
+import glob
+
 
 __all__ = [ 'BunchMappable', 'ScaleTypeAlt', 'BufferTypeAlt', 'obj2dict',
             'createBuffer', 'get_Buffer_andAttributeList', 'newBuffer',
@@ -384,8 +387,8 @@ def load_AttributeList(atts={}):
         a.name  = key
         val = atts[key]
 
-        if '\udcb5' in val: # fix non-compliant symbols
-            val = val.replace('\udcb5', '\xb5')
+##        if '\udcb5' in val: # fix non-compliant symbols
+##            val = val.replace('\udcb5', '\xb5')
 
         a.value = val
 
@@ -502,7 +505,10 @@ def att2dict(att):
     out = {}
     attn = att.next
     while attn:
-        out[attn.name] = attn.value
+        val = attn.value
+        if '\udcb5' in val: # fix non-compliant symbols
+            val = val.replace('\udcb5', '\xb5')
+        out[attn.name] = val
         attn = attn.next
     return out
 
@@ -511,3 +517,19 @@ def DestroyAttributeListSafe(att):
     if att.next:
         core.DestroyAttributeList2(att.next)
 
+
+def get_sample_folder():
+    folder = os.path.dirname(inspect.getfile(BunchMappable))
+    folder = os.path.join(folder, 'sample_files')
+    assert os.path.isdir(folder), 'Sample files not found!'
+    return folder
+
+def get_sample_image_filenames():
+    ptn = get_sample_folder()
+    ptn = os.path.join(ptn, '*.im7')
+    return glob.glob(ptn)
+
+def get_sample_vector_filenames():
+    ptn = get_sample_folder()
+    ptn = os.path.join(ptn, '*.im7')
+    return glob.glob(ptn)

@@ -12,8 +12,8 @@ import shutil
 from tempfile import mkdtemp
 
 import glob
-files = glob.glob('*.*7')
-files = [os.path.abspath(f) for f in files]
+files = ReadIM.extra.get_sample_image_filenames() + \
+                 ReadIM.extra.get_sample_vector_filenames()
 
 class TestIM7(TestCase):
 
@@ -27,6 +27,7 @@ class TestIM7(TestCase):
         print (self.tempdir)
         shutil.rmtree(self.tempdir)
     def test_load_im(self):
+
         for f in files:
 
             buff, atts   =  ReadIM.extra.get_Buffer_andAttributeList(f)
@@ -79,4 +80,4 @@ class TestIM7(TestCase):
 
 
 if __name__ == "__main__":
-    run_module_suite()
+    run_module_suite(argv=['-f',])

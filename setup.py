@@ -4,7 +4,7 @@
 setup.py file for SWIG example
 """
 
-version = '0.6.0'
+version = '0.6.1'
 
 #include "Python.h"
 
@@ -77,7 +77,7 @@ else:
            license      = 'Creative Commons Attribution-NonCommercial 3.0 Unported License',
            ext_modules  = [ReadIMX_module],
            packages     = ['ReadIM'],
-           package_data = {'ReadIM':['*.dll','sample/*.*']},
+           package_data = {'ReadIM':['sample_files/*.*']},
            include_package_data = True,
            script_args          = script_args,
 
