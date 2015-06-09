@@ -1,7 +1,17 @@
 #!/usr/bin/env python
 
 """
-setup.py file for SWIG example
+setup.py file readim
+
+run python setup.py [operation]
+
+operations
+----------
+swig    : Rerun swig. Not required unless changes to code.
+build | install | bdist_wininst etc: typical build commands.
+test: run the test suite.
+
+
 """
 
 version = '0.6.1'
@@ -20,21 +30,25 @@ if script_args[0] == 'test':
 
     # works only when called from this folder
     pth = sys.path.pop(0)
-    sys.path.insert(0, os.path.join(pth, 'ReadIM'))
+    pth_tests = os.path.join(pth, 'ReadIM')
+    print('test path:', pth_tests)
+    assert os.path.isdir(pth_tests)
+    sys.path.insert(0, pth_tests)
     from tests.test_ReadIM import *
     run_module_suite()
     # restore path
     sys.path.pop(0)
     sys.path.insert(0, pth)
 
-
-
-else:
+elif script_args[0] == 'test':
     try:
         args = ['swig', '-python','-c++' ,'-IReadIM/src','ReadIM/core.i']
         p= subprocess.check_call(args)
     except:
         print ('unable to run swig! is it installed?. Will try to perform action anyway...')
+
+else:
+
 
     scs = ['ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
             'zlib/adler32.c','zlib/deflate.c','zlib/infcodes.c',
@@ -57,13 +71,6 @@ else:
                                 extra_compile_args = extra_compile_args,
                                 )
 
-    license_link="""<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">\
-    <img alt="Creative Commons License" style="border-width:0"\
-     src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" />\
-     </a><br />This work is licensed under a <a rel="license"\
-      href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons\
-       Attribution-NonCommercial 3.0 Unported License</a>.
-       """
     description      = 'Read and write native DaVis images and vectors filetypes VC7 and IM7'
     long_description = ''.join(open('README').readlines())
 
@@ -74,7 +81,6 @@ else:
            author       = "Alan Fleming + LaVision",
            author_email =  'alanf@amc.edu.au',
            url          = 'https://bitbucket.org/fleming79/readim',
-           license      = 'Creative Commons Attribution-NonCommercial 3.0 Unported License',
            ext_modules  = [ReadIMX_module],
            packages     = ['ReadIM'],
            package_data = {'ReadIM':['sample_files/*.*']},
