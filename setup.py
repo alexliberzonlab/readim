@@ -22,6 +22,7 @@ from setuptools import setup, Extension
 
 import subprocess, sys, os
 import glob
+import io
 
 
 script_args = sys.argv[1:]
@@ -76,7 +77,7 @@ else:
 
     description      = 'Read and write native DaVis images and vectors filetypes VC7 and IM7'
     # Get the long description from the relevant file
-    with open(os.path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
+    with io.open(os.path.join(here, 'DESCRIPTION.rst')) as f:
         long_description = f.read()
 
     setup (name = 'ReadIM',
