@@ -17,4 +17,4 @@ deploy:
   provider: pypi
   user: fleming79
   password: Read1MPassword
-  distributions: "sdist bdist_wheel" # Your distribtuions here
+  distributions: "bdist_wheel" # Your distribtuions here

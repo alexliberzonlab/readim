@@ -14,7 +14,7 @@ test: run the test suite.
 
 """
 
-version = '0.6.4'
+version = '0.6.5'
 
 #include "Python.h"
 
