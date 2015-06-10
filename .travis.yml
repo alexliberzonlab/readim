@@ -18,5 +18,3 @@ deploy:
   user: fleming79@gmail.com
   password: Read1MPassword
   distributions: "sdist bdist_wheel" # Your distribtuions here
-  on:
-    tags: true
