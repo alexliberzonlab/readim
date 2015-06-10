@@ -12,3 +12,11 @@ install:
 # command to run tests
 script:
 - python setup.py test
+
+deploy:
+  provider: pypi
+  user: fleming79@gmail.com
+  password: Read1MPassword
+  distributions: "sdist bdist_wheel" # Your distribtuions here
+  on:
+    tags: true
