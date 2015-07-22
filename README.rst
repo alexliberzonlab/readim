@@ -40,7 +40,7 @@ Writing files
 >>> atts = ReadIM.load_AttributeList({'attribute':'value'})
 >>> ReadIM.WriteIM7('saved_file.im7', True, buff, atts.next)
 
-Finally, memory cleanup is not automatic. To prevent manual garbarge collection do the following:
+Finally, memory cleanup is not automatic. To prevent memory leaks do the following:
 
 >>> del(vbuff)
 >>> ReadIM.DestroyBuffer(buff)
