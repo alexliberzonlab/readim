@@ -10,6 +10,7 @@ Successfully installed with latest 32 and 64 bit versions of WinPython including
 
 2.7, 3.3 and 3.4
 Do either:
+
 >>> pip install ReadIM
 
 If this fails you will need to compile yourself. Clone the source and run the following.
