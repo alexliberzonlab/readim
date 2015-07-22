@@ -531,5 +531,5 @@ def get_sample_image_filenames():
 
 def get_sample_vector_filenames():
     ptn = get_sample_folder()
-    ptn = os.path.join(ptn, '*.im7')
+    ptn = os.path.join(ptn, '*.vc7')
     return glob.glob(ptn)
