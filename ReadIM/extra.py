@@ -262,7 +262,7 @@ def get_Buffer_andAttributeList(filename, buff=None, atts=None):
     try:
         err = core.ReadSpec2(filename, buff, atts)
     except:
-        core.DestroyBuffer(buffer)
+        core.DestroyBuffer(buff)
 
     if True:
         if err == core.IMREAD_ERR_FILEOPEN: raise IOError('File not found')
