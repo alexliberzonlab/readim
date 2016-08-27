@@ -5,6 +5,9 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
+os:
+  - linux
+  - osx
 # command to install dependencies
 install:
 - "pip install -r requirements.txt"
@@ -15,9 +18,10 @@ script:
 - python setup.py test
 
 deploy:
-  provider: pypi
+  -provider: pypi
   user: fleming79
   password: Read1MPassword2
   distributions: "bdist_wheel"
   on:
     branch: master
+

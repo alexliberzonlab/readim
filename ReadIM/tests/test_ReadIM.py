@@ -3,7 +3,6 @@ from __future__ import division, print_function, absolute_import
 import ReadIM
 
 import os
-import numpy as np
 from numpy.testing import (TestCase, assert_almost_equal, assert_equal,
                            assert_, assert_raises, run_module_suite,
                            assert_allclose)
