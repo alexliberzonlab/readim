@@ -18,6 +18,7 @@ script:
 - python setup.py test
 
 deploy:
+    # production pypi
   - provider: pypi
   user: fleming79
   password: Read1MPassword2
