@@ -1,9 +1,5 @@
 environment:
-global:
-    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
-    # /E:ON and /V:ON options are not enabled in the batch script intepreter
-    # See: http://stackoverflow.com/a/13751649/163740
-    #WITH_COMPILER: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_compiler.cmd"
+
   matrix:
 
     # For Python versions available on Appveyor, see
@@ -28,7 +24,7 @@ install:
   - "%PYTHON%\\python.exe -m pip install numpy"
 
 build:
-    - "%PYTHON%\\python.exe setup.py build install"
+    - "build.cmd %PYTHON%\\python.exe setup.py build install"
 
 test_script:
   # Put your test command here.
