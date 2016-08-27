@@ -28,25 +28,22 @@ import io
 script_args = sys.argv[1:]
 
 if script_args[0] == 'test':
-
-    # works only when called from this folder
+    from numpy.testing import run_module_suite
+# Remove the current directory so that ReadIM will load properly
     pth = sys.path.pop(0)
-    pth_tests = os.path.join(pth, 'ReadIM')
-    print('test path:', pth_tests)
-    assert os.path.isdir(pth_tests)
-    sys.path.insert(0, pth_tests)
-    from tests.test_ReadIM import *
-    run_module_suite()
-    # restore path
-    sys.path.pop(0)
-    sys.path.insert(0, pth)
+    testFileDir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'ReadIM/tests'))
+    assert os.path.isdir(testFileDir)
+    sys.path.insert(0, testFileDir)
 
-elif script_args[0] == 'test':
+    import test_ReadIM
+    run_module_suite('test_ReadIM', ['-f'])
+
+elif script_args[0] == 'swig':
     try:
         args = ['swig', '-python','-c++' ,'-IReadIM/src','ReadIM/core.i']
         p= subprocess.check_call(args)
     except:
-        print ('unable to run swig! is it installed?. Will try to perform action anyway...')
+        print ('unable to run swig! is it installed?')
 
 else:
 
