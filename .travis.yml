@@ -17,7 +17,7 @@ script:
 deploy:
   provider: pypi
   user: fleming79
-  password: Read1MPassword
+  password: Read1MPassword2
   distributions: "bdist_wheel"
   on:
     branch: master
