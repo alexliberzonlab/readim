@@ -19,7 +19,7 @@ script:
 
 deploy:
     # production pypi
-  - provider: pypi
+- provider: pypi
   user: fleming79
   password: Read1MPassword2
   distributions: "bdist_wheel"
