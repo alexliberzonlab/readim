@@ -10,6 +10,7 @@ import ctypes
 import numpy as np
 import inspect
 import glob
+import copy
 
 
 __all__ = [ 'BunchMappable', 'ScaleTypeAlt', 'BufferTypeAlt', 'obj2dict',
@@ -144,8 +145,7 @@ class BufferTypeAlt(BunchMappable):
 
         elif isinstance(buff, BufferTypeAlt):
             # make a copy
-            mappings = {}
-            mappings.update(buff._mappable)
+            mappings = copy.deepcopy(buff._mappable)
 
         elif isinstance(buff, dict):
             mappings= buff

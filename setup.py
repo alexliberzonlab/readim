@@ -14,7 +14,7 @@ test: run the test suite.
 
 """
 
-version = '0.6.6'
+version = '0.6.7'
 
 #include "Python.h"
 
@@ -115,6 +115,8 @@ else:
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6'
     ],
     keywords = 'IM7 VC7 DaVis LaVision FileIO PIV',
            )
