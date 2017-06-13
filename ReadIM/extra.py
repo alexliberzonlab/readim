@@ -114,10 +114,10 @@ class ScaleTypeAlt(BunchMappable):
             mappings = scale.__dict__
         else:
             mappings = dict(
-                        description = scale.description,
-                        factor      = scale.factor,
-                        offset      = scale.offset,
-                        unit        = scale.unit,
+                        description = str(scale.description),
+                        factor      = float(scale.factor),
+                        offset      = float(scale.offset),
+                        unit        = str(scale.unit),
                         )
         super(ScaleTypeAlt, self).__init__(mappings)
 
@@ -131,17 +131,18 @@ class BufferTypeAlt(BunchMappable):
         if isinstance(buff, core.BufferType):
 
             mappings = dict(
-                        image_sub_type = buff.image_sub_type,
+                        image_sub_type = int(buff.image_sub_type),
                         nf = int(buff.nf),
                         nx = int(buff.nx),
                         ny = int(buff.ny),
                         nz = int(buff.nz),
-                        isFloat = buff.isFloat,
+                        isFloat = int(buff.isFloat),
                         vectorGrid = int(buff.vectorGrid),
                         scaleX = ScaleTypeAlt(buff.scaleX).__dict__,
                         scaleY = ScaleTypeAlt(buff.scaleY).__dict__,
                         scaleI = ScaleTypeAlt(buff.scaleI).__dict__,
-                        totalLines = buff.totalLines)
+                        totalLines = int(buff.totalLines)
+                        )
 
         elif isinstance(buff, BufferTypeAlt):
             # make a copy

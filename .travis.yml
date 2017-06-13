@@ -5,6 +5,7 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
+  - "3.6"
 os:
   - linux
 #  - osx  #
@@ -22,7 +23,7 @@ deploy:
 - provider: pypi
   user: fleming79
   password: Read1MPassword2
-  distributions: "bdist_wheel"
+  distributions: "sdist  bdist_wheel"
   tags: true
   on:
     branch: master
