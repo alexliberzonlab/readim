@@ -14,7 +14,7 @@ test: run the test suite.
 
 """
 
-version = '0.6.8'
+version = '0.7.0'
 
 #include "Python.h"
 
@@ -74,8 +74,11 @@ else:
 
     description      = 'Read and write native DaVis images and vectors filetypes VC7 and IM7'
     # Get the long description from the relevant file
-    with io.open(os.path.join(here, 'DESCRIPTION.rst')) as f:
-        long_description = f.read()
+    try:
+        with io.open(os.path.join(here, 'DESCRIPTION.rst')) as f:
+            long_description = f.read()
+    except:
+        long_description = description
 
     setup (name = 'ReadIM',
             description = description,

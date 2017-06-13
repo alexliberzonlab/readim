@@ -76,7 +76,18 @@ class TestIM7(TestCase):
 
             ReadIM.DestroyBuffer(buff)
             ReadIM.DestroyAttributeListSafe(atts)
+    def test_bufferAlt(self):
+        import numpy as np
+        window = [(0,10),(10,0)]
+        buffAlt = ReadIM.newBuffer(window,3,3,2)
+        buffAlt.scaleX.offset = np.array(1)
+        buffNew = ReadIM.BufferTypeAlt(buffAlt)
+        assert not (buffAlt is buffNew)
+        assert type(buffNew.scaleX.offset) is float, "{0}".format(type(buffAlt.scaleX.offset))
+        pass
 
 
 if __name__ == "__main__":
+    test = TestIM7('test_bufferAlt')
+    test.debug()
     run_module_suite(argv=['-f',])

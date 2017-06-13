@@ -110,15 +110,12 @@ class BunchMappable():
 
 class ScaleTypeAlt(BunchMappable):
     def __init__(self, scale):
-        if isinstance(scale, BunchMappable):
-            mappings = scale.__dict__
-        else:
-            mappings = dict(
-                        description = str(scale.description),
-                        factor      = float(scale.factor),
-                        offset      = float(scale.offset),
-                        unit        = str(scale.unit),
-                        )
+        mappings = dict(
+                    description = str(scale.description),
+                    factor      = float(scale.factor),
+                    offset      = float(scale.offset),
+                    unit        = str(scale.unit),
+                    )
         super(ScaleTypeAlt, self).__init__(mappings)
 
 class BufferTypeAlt(BunchMappable):
@@ -128,8 +125,10 @@ class BufferTypeAlt(BunchMappable):
     def __init__(self, buff, DestroyBuffer = True, immutable=False,
                     str2num=None, parent=None, key=None):
 
-        if isinstance(buff, core.BufferType):
+        if isinstance(buff, dict):
+            mappings= copy.deepcopy(buff)
 
+        else:
             mappings = dict(
                         image_sub_type = int(buff.image_sub_type),
                         nf = int(buff.nf),
@@ -143,20 +142,6 @@ class BufferTypeAlt(BunchMappable):
                         scaleI = ScaleTypeAlt(buff.scaleI).__dict__,
                         totalLines = int(buff.totalLines)
                         )
-
-        elif isinstance(buff, BufferTypeAlt):
-            # make a copy
-            mappings = copy.deepcopy(buff._mappable)
-
-        elif isinstance(buff, dict):
-            mappings= buff
-
-        elif isinstance(buff, BunchMappable):
-            mappings = {}
-            obj2dict(buff, mappings) # tidy up
-
-        else:
-            raise TypeError('Type of buffer not recognised!\n%s' % repr(buff))
 
         super(BufferTypeAlt, self).__init__(mappings, immutable=immutable, str2num=str2num)
 
