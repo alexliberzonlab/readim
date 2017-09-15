@@ -25,5 +25,7 @@ deploy:
   skip_cleanup: true
   user: fleming79
   password: Read1MPassword2
+  distributions: "sdist bdist_wheel" # Your distributions here
   on:
     branch: master
+

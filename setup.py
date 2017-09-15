@@ -15,7 +15,7 @@ test: run the test suite.
 
 """
 
-version = '0.7.1'
+version = '0.7.2'
 
 long_description = """
 Overview
