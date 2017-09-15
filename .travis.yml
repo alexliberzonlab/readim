@@ -6,6 +6,10 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+    # PyPy versions
+  - "pypy"  # PyPy2 2.5.0
+  - "pypy3" # Pypy3 2.4.0
+  - "pypy-0.7.0"
 os:
   - linux
 #  - osx  #
@@ -24,7 +28,4 @@ deploy:
   user: fleming79
   password: Read1MPassword2
   distributions: "sdist  bdist_wheel"
-  tags: true
-  on:
-    branch: master
-
+  tags: false
