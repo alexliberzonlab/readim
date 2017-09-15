@@ -1,7 +1,9 @@
 Overview
 ========
-ReadIM is a c++ wrapper to load DaVis Images and Vectors DaVis V8.
-ReadIM is a 'low level' interface to C++ libraries provided by LaVision GMBH.
+ReadIM is a Python package to read and write DaVis Images and Vectors DaVis V8.
+It contains C++ libraries provided by `LaVision GMBH <http://www.lavision.de/en/>`_
+and a low level interface wrapper for Python.
+
 
 Installation
 ============
@@ -18,7 +20,7 @@ If this fails you will need to compile yourself. Clone the source and run the fo
 >>> python setup.py build install
 >>> python setup.py test
 
-If the test passes then all should be okay. 
+If the test passes then all should be okay.
 
 
 Usage

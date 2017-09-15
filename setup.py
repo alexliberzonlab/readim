@@ -9,6 +9,7 @@ operations
 ----------
 swig    : Rerun swig. Not required unless changes to code.
 build | install | bdist_wininst etc: typical build commands.
+sdist : create a source distribution.
 test: run the test suite.
 
 
@@ -16,7 +17,22 @@ test: run the test suite.
 
 version = '0.7.0'
 
-#include "Python.h"
+long_description = """
+Overview
+========
+ReadIM is a Python package to read and write DaVis Images and Vectors DaVis V8.
+It contains C++ libraries provided by `LaVision GMBH <http://www.lavision.de/en/>`_
+and a low level interface wrapper for Python.
+
+Installation
+============
+The libraries have been compiled successfully on Windows platforms with 64-bit and 32-bit python.
+You can install uising pip provided a compiler is available (built in to most common distributions).
+The latest source is available here: https://bitbucket.org/fleming79/readim).
+
+Higher level access is available using the package "IM" available here:
+https://bitbucket.org/fleming79/im.
+"""
 
 from setuptools import setup, Extension
 
@@ -47,7 +63,6 @@ elif script_args[0] == 'swig':
 
 else:
 
-
     scs = ['ReadIMX.cpp', 'ReadIM7.cpp', 'swigExtras.cpp',
             'zlib/adler32.c','zlib/deflate.c','zlib/infcodes.c',
             'zlib/inflate.c','zlib/infutil.c', 'zlib/uncompr.c',
@@ -60,9 +75,6 @@ else:
         assert os.path.isfile(s)
 
     extra_compile_args  =['-IReadIM/src']
-
-    here = os.path.abspath(os.path.dirname(__file__))
-
 
     ReadIMX_module = Extension('ReadIM._core',
     # Auto SWIG doesn't work because the files are outputs 'core.py' to the current directory not ReadIM
